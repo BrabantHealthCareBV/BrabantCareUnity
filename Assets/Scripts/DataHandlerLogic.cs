@@ -21,6 +21,11 @@ public class DataHandlerLogic : MonoBehaviour
         }
     }
 
+    public void UpdateData()
+    {
+
+    }
+
 
     // Update is called once per frame
     void Update()
