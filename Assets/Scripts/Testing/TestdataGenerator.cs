@@ -2,33 +2,16 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class TestdataGenerator : MonoBehaviour
+public static class TestdataGenerator
 {
-    private readonly List<string> doctorNames = new List<string> { "Alice", "Bob", "Charlie", "Diana", "Ethan" };
-    private readonly List<string> specializations = new List<string> { "Cardiology", "Neurology", "Pediatrics", "Oncology", "Orthopedics" };
+    private static readonly List<string> doctorNames = new List<string> { "Alice", "Bob", "Charlie", "Diana", "Ethan" };
+    private static readonly List<string> specializations = new List<string> { "Cardiology", "Neurology", "Pediatrics", "Oncology", "Orthopedics" };
 
-    private readonly List<string> firstNames = new List<string> { "Emma", "Noah", "Olivia", "Liam", "Sophia", "Mason" };
-    private readonly List<string> lastNames = new List<string> { "Smith", "Johnson", "Williams", "Brown", "Jones" };
+    private static readonly List<string> firstNames = new List<string> { "Emma", "Noah", "Olivia", "Liam", "Sophia", "Mason" };
+    private static readonly List<string> lastNames = new List<string> { "Smith", "Johnson", "Williams", "Brown", "Jones" };
 
-    void Start()
-    {
-        Doctor testDoctor = GenerateDoctor();
-        Guardian testGuardian = GenerateGuardian();
-        Patient testPatient = GeneratePatient(testGuardian.ID, testDoctor.ID);
 
-        Debug.Log($"Generated Doctor: {testDoctor.Name}, Specialization: {testDoctor.Specialization}, ID: {testDoctor.ID}");
-        Debug.Log($"Generated Guardian: {testGuardian.FirstName} {testGuardian.LastName}, ID: {testGuardian.ID}");
-        Debug.Log($"Generated Patient: {testPatient.FirstName} {testPatient.LastName}, GuardianID: {testPatient.GuardianID}, DoctorID: {testPatient.DoctorID}");
-
-        TreatmentPlanCreator creator = new TreatmentPlanCreator();
-
-        bool requiresSurgery = false; // Set to true if the patient needs surgery
-
-        TreatmentPlan treatmentPlan = creator.GenerateFractureTreatmentPlan(testPatient.ID, testDoctor.ID, requiresSurgery);
-
-    }
-
-    Doctor GenerateDoctor()
+    public static Doctor GenerateDoctor()
     {
         return new Doctor
         {
@@ -39,7 +22,7 @@ public class TestdataGenerator : MonoBehaviour
         };
     }
 
-    Guardian GenerateGuardian()
+    public static Guardian GenerateGuardian()
     {
         return new Guardian
         {
@@ -50,7 +33,7 @@ public class TestdataGenerator : MonoBehaviour
         };
     }
 
-    Patient GeneratePatient(Guid guardianID, Guid? doctorID)
+    public static Patient GeneratePatient(Guid guardianID, Guid? doctorID)
     {
         return new Patient
         {

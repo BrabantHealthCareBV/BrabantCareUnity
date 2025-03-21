@@ -2,15 +2,14 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class TreatmentPlanCreator : MonoBehaviour
+public static class TreatmentPlanCreator
 {
-    public TreatmentPlan GenerateFractureTreatmentPlan(Guid patientID, Guid doctorID, bool requiresSurgery)
+    static public TreatmentPlan GenerateFractureTreatmentPlan(Guid patientID, Guid doctorID, bool requiresSurgery)
     {
         Guid treatmentPlanID = Guid.NewGuid();
         List<Guid> careMomentIDs = new List<Guid>();
         List<TreatmentPlan_CareMoment> treatmentPlanCareMoments = new List<TreatmentPlan_CareMoment>();
 
-        // Define care moments
         List<string> generalSteps = new List<string>
         {
             "Aankomst bij de Spoedeisende Hulp",
