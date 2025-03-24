@@ -5,7 +5,11 @@ public class DataHandlerLogic : MonoBehaviour
 {
     public bool GenerateDate;
     public bool requiresSurgery;
-    public TMP_Text UserDataText;
+    public TMP_Text PatientRegion;
+    public TMP_Text GaurdianRegion;
+
+
+
     void Start()
     {
         if (GenerateDate)
@@ -20,6 +24,8 @@ public class DataHandlerLogic : MonoBehaviour
             TreatmentPlanCreator.GenerateFractureTreatmentPlan(testPatient.ID,testDoctor.ID,requiresSurgery);
         }
     }
+
+    
 
     public void UpdateData()
     {
