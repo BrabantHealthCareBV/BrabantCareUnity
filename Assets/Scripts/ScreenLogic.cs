@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScreenLogic : MonoBehaviour
 {
@@ -48,9 +49,11 @@ public class ScreenLogic : MonoBehaviour
     // Custom method for activating the Game Screen with Game UI
     public void ShowGameScreen()
     {
-        DeactivateAllScreens();
-        GameScreen.SetActive(true);
-        GameUi.SetActive(true);
+
+        SceneManager.LoadScene("GameScene");
+        //DeactivateAllScreens();
+        //GameScreen.SetActive(true);
+        //GameUi.SetActive(true);
     }
 
     // Helper method to set a single active screen and deactivate others
