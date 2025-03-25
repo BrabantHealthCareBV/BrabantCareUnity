@@ -3,11 +3,12 @@ using UnityEngine;
 public class ScreenLogic : MonoBehaviour
 {
     // References to the different screens
-    public GameObject beginScreen;
+    public GameObject welcomeScreen;
     public GameObject homeScreen;
     public GameObject loginScreen;
     public GameObject editInfoScreen;
-    public GameObject finalGameScreen;
+    public GameObject GameScreen;
+    public GameObject GameUi;
 
     private DataHandlerLogic dataHandler;
 
@@ -23,7 +24,7 @@ public class ScreenLogic : MonoBehaviour
     // Method to show the Begin Screen
     public void ShowBeginScreen()
     {
-        SetActiveScreen(beginScreen);
+        SetActiveScreen(welcomeScreen);
     }
 
     // Method to show the Home Screen
@@ -44,27 +45,33 @@ public class ScreenLogic : MonoBehaviour
         SetActiveScreen(editInfoScreen);
     }
 
-    // Method to show the Final Game Screen (for future use)
-    public void ShowFinalGameScreen()
+    // Custom method for activating the Game Screen with Game UI
+    public void ShowGameScreen()
     {
-        SetActiveScreen(finalGameScreen);
+        DeactivateAllScreens();
+        GameScreen.SetActive(true);
+        GameUi.SetActive(true);
     }
 
-    // Helper method to set the active screen and deactivate all others
+    // Helper method to set a single active screen and deactivate others
     private void SetActiveScreen(GameObject screenToActivate)
     {
-        // Deactivate all screens
-        beginScreen.SetActive(false);
-        homeScreen.SetActive(false);
-        loginScreen.SetActive(false);
-        editInfoScreen.SetActive(false);
-        finalGameScreen.SetActive(false);
-
-        // Activate the selected screen
+        DeactivateAllScreens();
         if (screenToActivate != null)
         {
             screenToActivate.SetActive(true);
         }
+    }
+
+    // Helper method to deactivate all screens
+    private void DeactivateAllScreens()
+    {
+        welcomeScreen.SetActive(false);
+        homeScreen.SetActive(false);
+        loginScreen.SetActive(false);
+        editInfoScreen.SetActive(false);
+        GameUi.SetActive(false);
+        GameScreen.SetActive(false);
     }
 
     // Method to handle the Login Button logic
