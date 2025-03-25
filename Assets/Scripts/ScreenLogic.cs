@@ -8,8 +8,6 @@ public class ScreenLogic : MonoBehaviour
     public GameObject homeScreen;
     public GameObject loginScreen;
     public GameObject editInfoScreen;
-    public GameObject GameScreen;
-    public GameObject GameUi;
 
     private DataHandlerLogic dataHandler;
 
@@ -46,15 +44,7 @@ public class ScreenLogic : MonoBehaviour
         SetActiveScreen(editInfoScreen);
     }
 
-    // Custom method for activating the Game Screen with Game UI
-    public void ShowGameScreen()
-    {
-
-        SceneManager.LoadScene("GameScene");
-        //DeactivateAllScreens();
-        //GameScreen.SetActive(true);
-        //GameUi.SetActive(true);
-    }
+    
 
     // Helper method to set a single active screen and deactivate others
     private void SetActiveScreen(GameObject screenToActivate)
@@ -73,8 +63,6 @@ public class ScreenLogic : MonoBehaviour
         homeScreen.SetActive(false);
         loginScreen.SetActive(false);
         editInfoScreen.SetActive(false);
-        GameUi.SetActive(false);
-        GameScreen.SetActive(false);
     }
 
     // Method to handle the Login Button logic
