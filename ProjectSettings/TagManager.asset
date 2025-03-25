@@ -13,7 +13,7 @@ TagManager:
   - UI
   - CollisionLayer
   - Video
-  - 
+  - InteractiveLayer
   - 
   - 
   - 
@@ -50,14 +50,14 @@ TagManager:
   - name: Collision
     uniqueID: 1491863151
     locked: 0
+  - name: Decor
+    uniqueID: 1911881403
+    locked: 0
   - name: Player
     uniqueID: 2105598563
     locked: 0
   - name: WalkBehind
     uniqueID: 95250367
-    locked: 0
-  - name: Decor
-    uniqueID: 1911881403
     locked: 0
   m_RenderingLayers:
   - Default
