@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ProjectManager : MonoBehaviour
+public class KeepAlive : MonoBehaviour
 {
-    public static ProjectManager Instance { get; private set; }
+    public static KeepAlive Instance { get; private set; }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -18,12 +18,5 @@ public class ProjectManager : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(this);
-    }
-
-    public void StartGame()
-    {
-        // hier laden we de eerste scene van het spel
-        // in dit geval is dit de scene met de index 1
-        SceneManager.LoadScene("GameScene");
     }
 }
