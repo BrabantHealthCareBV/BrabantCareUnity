@@ -6,11 +6,11 @@ public class DataHandlerLogic : MonoBehaviour
     public bool GenerateDate = true;
     public bool requiresSurgery;
     public GameObject PatientRegion;
-    public GameObject GaurdianRegion;
+    public GameObject GuardianRegion;
     public TMP_Text personalInfo; // The TMP_Text UI component to display patient info
     // 0 name 1 surname
     private TMP_InputField[] PatientFields;
-    private TMP_InputField[] GaurdianFields;
+    private TMP_InputField[] GuardianFields;
     private Doctor testDoctor;
     public Guardian guardian;
     public Patient patient;
@@ -18,7 +18,7 @@ public class DataHandlerLogic : MonoBehaviour
     void Start()
     {
         PatientFields = GetInputFieldsFromGameObject(PatientRegion);
-        GaurdianFields = GetInputFieldsFromGameObject(GaurdianRegion);
+        GuardianFields = GetInputFieldsFromGameObject(GuardianRegion);
 
         if (GenerateDate)
         {
@@ -39,10 +39,10 @@ public class DataHandlerLogic : MonoBehaviour
             PatientFields[1].onValueChanged.AddListener((text) => UpdatePatientData());
         }
 
-        if (GaurdianFields != null && GaurdianFields.Length >= 2)
+        if (GuardianFields != null && GuardianFields.Length >= 2)
         {
-            GaurdianFields[0].onValueChanged.AddListener((text) => UpdateGuardianData());
-            GaurdianFields[1].onValueChanged.AddListener((text) => UpdateGuardianData());
+            GuardianFields[0].onValueChanged.AddListener((text) => UpdateGuardianData());
+            GuardianFields[1].onValueChanged.AddListener((text) => UpdateGuardianData());
         }
     }
 
@@ -56,10 +56,10 @@ public class DataHandlerLogic : MonoBehaviour
         }
 
         // Update Guardian fields (name and surname)
-        if (GaurdianFields != null && GaurdianFields.Length >= 2)
+        if (GuardianFields != null && GuardianFields.Length >= 2)
         {
-            GaurdianFields[0].text = guardian.FirstName;  // namefield
-            GaurdianFields[1].text = guardian.LastName;   // surnamefield
+            GuardianFields[0].text = guardian.FirstName;  // namefield
+            GuardianFields[1].text = guardian.LastName;   // surnamefield
         }
 
         // Format and display data in the TMP_Text
@@ -105,10 +105,10 @@ public class DataHandlerLogic : MonoBehaviour
     // Method to update guardian data from input fields
     private void UpdateGuardianData()
     {
-        if (GaurdianFields != null && GaurdianFields.Length >= 2)
+        if (GuardianFields != null && GuardianFields.Length >= 2)
         {
-            guardian.FirstName = GaurdianFields[0].text;
-            guardian.LastName = GaurdianFields[1].text;
+            guardian.FirstName = GuardianFields[0].text;
+            guardian.LastName = GuardianFields[1].text;
             Debug.Log($"Updated Guardian: {guardian.FirstName} {guardian.LastName}");
         }
     }

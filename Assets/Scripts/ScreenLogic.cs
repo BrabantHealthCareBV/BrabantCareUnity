@@ -75,7 +75,7 @@ public class ScreenLogic : MonoBehaviour
         }
 
         // If there is no data in the DataHandler, go to the Login screen
-        if (dataHandler.patient == null || dataHandler.guardian == null)
+        if (dataHandler.patient.FirstName == "" || dataHandler.patient.LastName == "" || dataHandler.guardian.FirstName == "" || dataHandler.guardian.LastName == "")
         {
             ShowLoginScreen();
         }
