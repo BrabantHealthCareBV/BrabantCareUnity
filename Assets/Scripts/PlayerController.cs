@@ -1,75 +1,45 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
-public class PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    public float MoveSpeed;
-
-    private bool isMoving;
-
-    private Vector2 input;
-
+    [SerializeField] private float moveSpeed = 5f;
+    private Rigidbody2D rb;
+    private Vector2 moveInput;
     private Animator animator;
 
-    public LayerMask solidObjectsLayer;
-
-    private void Awake()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
-    private void Update() 
+    // Update is called once per frame
+    void Update()
     {
-        if (!isMoving)
-        {
-            input.x = Input.GetAxisRaw("Horizontal");
-            input.y = Input.GetAxisRaw("Vertical");
-
-            //Debug.Log("This is input.x" + input.x);
-            //Debug.Log("This is input.y" + input.y);
-
-            if (input.x != 0) input.y = 0;
-
-            if (input != Vector2.zero)
-            {
-
-                animator.SetFloat("moveX", input.x);
-                animator.SetFloat("moveY", input.y);
-
-                var targetPos = transform.position;
-                targetPos.x += input.x;
-                targetPos.y += input.y;
-
-                if (IsWalkable(targetPos))
-                    StartCoroutine(Move(targetPos));
-            }
-        }
-
-        animator.SetBool("isMoving", isMoving);
+        rb.linearVelocity = moveInput * moveSpeed;
     }
 
-    IEnumerator Move(Vector3 targetPos)
+    public void Move(InputAction.CallbackContext context)
     {
-        isMoving = true;
+        animator.SetBool("isWalking", true);
 
-        while ((targetPos - transform.position).sqrMagnitude > Mathf.Epsilon)
+        if (context.canceled)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, MoveSpeed * Time.deltaTime);
-            yield return null;
+            animator.SetBool("isWalking", false);
+            animator.SetFloat("LastInputX", moveInput.x);
+            animator.SetFloat("LastInputY", moveInput.y);
         }
 
-        transform.position = targetPos;
+        moveInput = context.ReadValue<Vector2>();
+        animator.SetFloat("InputX", moveInput.x);
+        animator.SetFloat("InputY", moveInput.y);
 
-        isMoving = false;
-    }
-
-    private bool IsWalkable(Vector3 targetPos)
-    {
-        if (Physics2D.OverlapCircle(targetPos, 0.2f, solidObjectsLayer) != null)
-        { 
-            return false;
+        if (moveInput.x != 0)
+        {
+            moveInput.y = 0; // Zorg ervoor dat de speler niet tegelijkertijd horizontaal en verticaal beweegt
         }
-            
-        return true;
     }
 }
