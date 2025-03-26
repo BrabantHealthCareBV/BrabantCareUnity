@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      banner-gipskamer-jongen-met-gips_0: -2443221085928248164
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
