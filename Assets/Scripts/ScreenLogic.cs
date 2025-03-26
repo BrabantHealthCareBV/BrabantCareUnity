@@ -8,6 +8,7 @@ public class ScreenLogic : MonoBehaviour
     public GameObject homeScreen;
     public GameObject loginScreen;
     public GameObject editInfoScreen;
+    public GameObject tipsScreen;
 
     private DataHandlerLogic dataHandler;
 
@@ -44,7 +45,11 @@ public class ScreenLogic : MonoBehaviour
         SetActiveScreen(editInfoScreen);
     }
 
-    
+    public void TipsScreen()
+    {
+        SetActiveScreen(tipsScreen);
+    }
+
 
     // Helper method to set a single active screen and deactivate others
     private void SetActiveScreen(GameObject screenToActivate)
