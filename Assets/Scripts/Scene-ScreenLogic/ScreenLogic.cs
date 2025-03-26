@@ -9,6 +9,7 @@ public class ScreenLogic : MonoBehaviour
     public GameObject loginScreen;
     public GameObject editInfoScreen;
     public GameObject tipsScreen;
+    public GameObject registerScreen;
 
 
     void Start()
@@ -45,6 +46,10 @@ public class ScreenLogic : MonoBehaviour
     {
         SetActiveScreen(tipsScreen);
     }
+    public void RegisterScreen()
+    {
+        SetActiveScreen(registerScreen);
+    }
 
 
     // Helper method to set a single active screen and deactivate others
@@ -64,6 +69,7 @@ public class ScreenLogic : MonoBehaviour
         homeScreen.SetActive(false);
         loginScreen.SetActive(false);
         editInfoScreen.SetActive(false);
+        registerScreen.SetActive(false);
     }
 
     // Method to handle the Login Button logic

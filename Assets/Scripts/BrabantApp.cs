@@ -11,6 +11,9 @@ public class BrabantApp : MonoBehaviour
     [Header("User Edit fields")]
     public GameObject PatientRegion;
     public GameObject GaurdianRegion;
+    private TMP_InputField[] PatientFields;
+    private TMP_InputField[] GuardianFields;
+
     [Header("User Login fields")]
     public GameObject AccountLoginRegion;
 
@@ -18,17 +21,20 @@ public class BrabantApp : MonoBehaviour
     public GameObject PatientRegisterRegion;
     public GameObject GaurdianRegisterRegion;
     public GameObject AccountRegisterRegion;
+    private TMP_InputField[] PatientRegisterFields;
+    private TMP_InputField[] GuardianRegisterFields;
 
     [Header("Personal Info")]
     public TMP_Text personalInfo;
 
 
-    private TMP_InputField[] PatientFields;
-    private TMP_InputField[] GuardianFields;
     void Start()
     {
         PatientFields = GetInputFieldsFromGameObject(PatientRegion);
         GuardianFields = GetInputFieldsFromGameObject(GaurdianRegion);
+
+        PatientRegisterFields = GetInputFieldsFromGameObject(PatientRegisterRegion);
+        GuardianRegisterFields = GetInputFieldsFromGameObject(GaurdianRegisterRegion);
 
         if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
         {
@@ -45,34 +51,45 @@ public class BrabantApp : MonoBehaviour
 
         }
 
-        UpdateData();
+        saveData(PatientFields, GuardianFields);
 
         AddFieldListeners();
     }
 
 
-    public void UpdateData()
+    public void saveData(TMP_InputField[] patientFields, TMP_InputField[] guardianFields)
     {
-        if (KeepAlive.Instance.StoredPatient == null || KeepAlive.Instance.StoredGuardian == null)
-        {
-            Debug.LogWarning("No stored patient or guardian data found.");
-            return;
-        }
 
         // Update Patient fields (name and surname)
-        if (PatientFields != null && PatientFields.Length >= 2)
+        if (patientFields != null && patientFields.Length >= 2)
         {
-            PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;  // name field
-            PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;   // surname field
+            KeepAlive.Instance.StoredPatient.FirstName = patientFields[0].text;
+            KeepAlive.Instance.StoredPatient.LastName = patientFields[1].text;
         }
 
-        // Update Guardian fields (name and surname)
+        if (guardianFields != null && guardianFields.Length >= 2)
+        {
+            KeepAlive.Instance.StoredGuardian.FirstName = guardianFields[0].text;
+            KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
+        }
+
+        DisplayPatientInfo();
+        updateUI();
+    }
+
+    public void updateUI()
+    {
+        if (PatientFields != null && PatientFields.Length >= 2)
+        {
+            PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;
+            PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;
+        }
+
         if (GuardianFields != null && GuardianFields.Length >= 2)
         {
-            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;  // name field
-            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;   // surname field
+            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;
+            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;
         }
-        DisplayPatientInfo();
     }
 
     private void DisplayPatientInfo()
@@ -122,6 +139,7 @@ public class BrabantApp : MonoBehaviour
             return null;
         }
     }
+    #region callbacks
 
     private void AddFieldListeners()
     {
@@ -136,26 +154,44 @@ public class BrabantApp : MonoBehaviour
             GuardianFields[0].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
             GuardianFields[1].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
         }
+
+        // Register Fields Listeners
+        if (PatientRegisterFields != null && PatientRegisterFields.Length >= 2)
+        {
+            PatientRegisterFields[0].onValueChanged.AddListener(delegate { OnPatientRegisterDataChanged(); });
+            PatientRegisterFields[1].onValueChanged.AddListener(delegate { OnPatientRegisterDataChanged(); });
+        }
+
+        if (GuardianRegisterFields != null && GuardianRegisterFields.Length >= 2)
+        {
+            GuardianRegisterFields[0].onValueChanged.AddListener(delegate { OnGuardianRegisterDataChanged(); });
+            GuardianRegisterFields[1].onValueChanged.AddListener(delegate { OnGuardianRegisterDataChanged(); });
+        }
     }
+
 
     private void OnPatientDataChanged()
     {
-        if (KeepAlive.Instance.StoredPatient != null)
-        {
-            KeepAlive.Instance.StoredPatient.FirstName = PatientFields[0].text;
-            KeepAlive.Instance.StoredPatient.LastName = PatientFields[1].text;
-        }
+        saveData(PatientFields, GuardianFields);
         Debug.Log("Patient data updated in KeepAlive.");
-        DisplayPatientInfo();
     }
 
     private void OnGuardianDataChanged()
     {
-        if (KeepAlive.Instance.StoredGuardian != null)
-        {
-            KeepAlive.Instance.StoredGuardian.FirstName = GuardianFields[0].text;
-            KeepAlive.Instance.StoredGuardian.LastName = GuardianFields[1].text;
-        }
+        saveData(PatientFields, GuardianFields);
         Debug.Log("Guardian data updated in KeepAlive.");
     }
+
+    private void OnPatientRegisterDataChanged()
+    {
+        saveData(PatientRegisterFields, GuardianRegisterFields);
+        Debug.Log("Patient registration data updated in KeepAlive.");
+    }
+
+    private void OnGuardianRegisterDataChanged()
+    {
+        saveData(PatientRegisterFields, GuardianRegisterFields);
+        Debug.Log("Guardian registration data updated in KeepAlive.");
+    }
+    #endregion
 }
