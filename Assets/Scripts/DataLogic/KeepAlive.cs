@@ -4,11 +4,15 @@ using UnityEngine.SceneManagement;
 public class KeepAlive : MonoBehaviour
 {
     public static KeepAlive Instance { get; private set; }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    // Persistent Data
+    public Doctor StoredDoctor { get; set; }
+    public Guardian StoredGuardian { get; set; }
+    public Patient StoredPatient { get; set; }
+    public string UserToken { get; set; }
+
     void Awake()
     {
-        // hier controleren we of er al een instantie is van deze singleton
-        // als dit zo is dan hoeven we geen nieuwe aan te maken en verwijderen we deze
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -16,7 +20,7 @@ public class KeepAlive : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        DontDestroyOnLoad(this);
     }
 }
