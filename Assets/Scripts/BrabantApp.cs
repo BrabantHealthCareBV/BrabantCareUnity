@@ -1,8 +1,14 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 public class BrabantApp : MonoBehaviour
 {
+    [Header("Test Data")]
+    public User user;
+
+    [Header("Dependencies")]
+    public UserApiClient userApiClient;
 
     [Header("Settings")]
     public bool GenerateDate = true;
@@ -16,6 +22,8 @@ public class BrabantApp : MonoBehaviour
 
     [Header("User Login fields")]
     public GameObject AccountLoginRegion;
+    private TMP_InputField[] LoginFields;
+    private TMP_InputField[] RegisterFields;
 
     [Header("User Register fields")]
     public GameObject PatientRegisterRegion;
@@ -32,6 +40,8 @@ public class BrabantApp : MonoBehaviour
     {
         PatientFields = GetInputFieldsFromGameObject(PatientRegion);
         GuardianFields = GetInputFieldsFromGameObject(GaurdianRegion);
+        LoginFields = GetAccountInputFieldsFromGameObject(AccountLoginRegion);
+        RegisterFields = GetAccountInputFieldsFromGameObject(AccountRegisterRegion);
 
         PatientRegisterFields = GetInputFieldsFromGameObject(PatientRegisterRegion);
         GuardianRegisterFields = GetInputFieldsFromGameObject(GaurdianRegisterRegion);
@@ -129,6 +139,27 @@ public class BrabantApp : MonoBehaviour
             return null;
         }
     }
+        public TMP_InputField[] GetAccountInputFieldsFromGameObject(GameObject mainGameObject)
+    {
+        if (mainGameObject != null)
+        {
+            TMP_InputField nameField = mainGameObject.transform.Find("UsernameInput")?.GetComponent<TMP_InputField>();
+            TMP_InputField surnameField = mainGameObject.transform.Find("PasswordInput")?.GetComponent<TMP_InputField>();
+
+            if (nameField == null || surnameField == null)
+            {
+                Debug.LogError("Name field or surname field is missing.");
+            }
+
+            return new TMP_InputField[] { nameField, surnameField };
+        }
+        else
+        {
+            Debug.LogWarning("Fields not found in mainGameObject");
+            return null;
+        }
+    }
+
     #region callbacks
 
     private void AddFieldListeners()
@@ -183,5 +214,59 @@ public class BrabantApp : MonoBehaviour
         saveData(PatientRegisterFields, GuardianRegisterFields);
         Debug.Log("Guardian registration data updated in KeepAlive.");
     }
+    #endregion
+
+    #region Login
+
+    [ContextMenu("User/Register")]
+    public async void Register()
+    {
+        user = new User(RegisterFields[0].text, RegisterFields[1].text);
+
+        IWebRequestReponse webRequestResponse = await userApiClient.Register(user);
+
+        switch (webRequestResponse)
+        {
+            case WebRequestData<string> dataResponse:
+                Debug.Log("Register succes!");
+                // TODO: Handle succes scenario;
+                //messageText.text = "Register succes!";
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Register error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                //messageText.text = "Register error: " + errorMessage;
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+        }
+    }
+
+    [ContextMenu("User/Login")]
+    public async void Login()
+    {
+        user = new User(LoginFields[0].text, LoginFields[1].text);
+
+        IWebRequestReponse webRequestResponse = await userApiClient.Login(user);
+
+        switch (webRequestResponse)
+        {
+            case WebRequestData<string> dataResponse:
+                Debug.Log("Login succes!");
+                // TODO: Todo handle succes scenario.
+                // TODO: doorverwijzen naar de tijdlijn.
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Login error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                //messageText.text = "Login error: " + errorMessage;
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+        }
+    }
+
     #endregion
 }
