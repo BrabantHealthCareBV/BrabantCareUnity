@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0002a42a8b02162469e544abb52d1cc7
+guid: 3614debdf6e88db438fd99fa20aed179
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6127240715112057362
-    second: groepsprojectBackground_0
+      213: 7933178399827241051
+    second: Kindgipsziekenhuis_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: groepsprojectBackground_0
+      name: Kindgipsziekenhuis_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 72
         y: 0
-        width: 1920
-        height: 1080
+        width: 890
+        height: 888
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 21a809587f4580550800000000000000
-      internalID: 6127240715112057362
+      spriteID: b58218d09bf481e60800000000000000
+      internalID: 7933178399827241051
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      groepsprojectBackground_0: 6127240715112057362
+      Kindgipsziekenhuis_0: 7933178399827241051
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
