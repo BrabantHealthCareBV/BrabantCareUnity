@@ -72,8 +72,6 @@ public class BrabantApp : MonoBehaviour
             KeepAlive.Instance.StoredGuardian.FirstName = guardianFields[0].text;
             KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
         }
-
-        DisplayPatientInfo();
         updateUI();
     }
 
@@ -90,24 +88,16 @@ public class BrabantApp : MonoBehaviour
             GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;
             GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;
         }
-    }
 
-    private void DisplayPatientInfo()
-    {
-        // Assuming that you want to display the patient's name and next appointment info in the TMP_Text field
         string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}\n";
 
-        // Assuming you have the next appointment date as part of the treatment plan
         string nextAppointment = "Next Appointment: ";
 
-        // Fetch the next appointment from the treatment plan
-        string appointmentDate = "TBD"; // Replace this with actual logic to fetch the next appointment date
+        string appointmentDate = "TBD";
         nextAppointment += appointmentDate;
 
-        // Combine the information
         patientInfo += nextAppointment;
 
-        // Set the text of the TMP_Text component
         if (personalInfo != null)
         {
             personalInfo.text = patientInfo;
