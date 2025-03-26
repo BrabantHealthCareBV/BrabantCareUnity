@@ -10,13 +10,9 @@ public class ScreenLogic : MonoBehaviour
     public GameObject editInfoScreen;
     public GameObject tipsScreen;
 
-    private DataHandlerLogic dataHandler;
 
     void Start()
     {
-        // You can get a reference to the DataHandlerLogic from the scene if it's attached to a GameObject
-        dataHandler = Object.FindFirstObjectByType<DataHandlerLogic>();
-
         // Initially, show the begin screen
         ShowBeginScreen();
     }
@@ -73,14 +69,9 @@ public class ScreenLogic : MonoBehaviour
     // Method to handle the Login Button logic
     public void OnLoginButtonClicked()
     {
-        if (dataHandler == null)
-        {
-            Debug.LogError("DataHandlerLogic reference is missing.");
-            return;
-        }
 
         // If there is no data in the DataHandler, go to the Login screen
-        if (dataHandler.patient == null || dataHandler.guardian == null)
+        if (KeepAlive.Instance.StoredPatient == null || KeepAlive.Instance.StoredGuardian == null)
         {
             ShowLoginScreen();
         }
