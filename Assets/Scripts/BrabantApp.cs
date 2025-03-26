@@ -11,6 +11,13 @@ public class BrabantApp : MonoBehaviour
     [Header("User Edit fields")]
     public GameObject PatientRegion;
     public GameObject GaurdianRegion;
+    [Header("User Login fields")]
+    public GameObject AccountLoginRegion;
+
+    [Header("User Register fields")]
+    public GameObject PatientRegisterRegion;
+    public GameObject GaurdianRegisterRegion;
+    public GameObject AccountRegisterRegion;
 
     [Header("Personal Info")]
     public TMP_Text personalInfo;
@@ -35,10 +42,14 @@ public class BrabantApp : MonoBehaviour
             Debug.Log($"Generated Doctor: {KeepAlive.Instance.StoredDoctor.Name}, Specialization: {KeepAlive.Instance.StoredDoctor.Specialization}, ID: {KeepAlive.Instance.StoredDoctor.ID}");
             Debug.Log($"Generated Guardian: {KeepAlive.Instance.StoredGuardian.FirstName} {KeepAlive.Instance.StoredGuardian.LastName}, ID: {KeepAlive.Instance.StoredGuardian.ID}");
             Debug.Log($"Generated Patient: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}, GuardianID: {KeepAlive.Instance.StoredPatient.GuardianID}, DoctorID: {KeepAlive.Instance.StoredPatient.DoctorID}");
+
         }
 
         UpdateData();
+
+        AddFieldListeners();
     }
+
 
     public void UpdateData()
     {
@@ -135,6 +146,7 @@ public class BrabantApp : MonoBehaviour
             KeepAlive.Instance.StoredPatient.LastName = PatientFields[1].text;
         }
         Debug.Log("Patient data updated in KeepAlive.");
+        DisplayPatientInfo();
     }
 
     private void OnGuardianDataChanged()
