@@ -3369,7 +3369,10 @@ MonoBehaviour:
   PositiveImages:
   - {fileID: 21300000, guid: e9f67863af4488f4ca3e959bd16bf112, type: 3}
   - {fileID: -8343299296673884554, guid: ae9cdcc14b8c4064da50717ece040e99, type: 3}
+  - {fileID: 9080290104940472877, guid: 6c44b246a177f51408e0b34fa7670943, type: 3}
+  - {fileID: -1536928307054614186, guid: 2b30de5c4d726d343ace641fe68a1eab, type: 3}
   Popup: {fileID: 367374444}
+  OkButton: {fileID: 911935681}
   PopupImage: {fileID: 803389681}
 --- !u!1 &372809960
 GameObject:
@@ -6846,10 +6849,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 367374444}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 367374446}
+        m_TargetAssemblyTypeName: PositiveMessageManager, Assembly-CSharp
+        m_MethodName: PopUpScreen
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
