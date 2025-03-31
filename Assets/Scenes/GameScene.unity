@@ -21368,7 +21368,7 @@ GameObject:
   - component: {fileID: 878846230}
   - component: {fileID: 878846231}
   m_Layer: 6
-  m_Name: VideoCast
+  m_Name: "VideoR\xF6ntgen"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22878,7 +22878,7 @@ GameObject:
   - component: {fileID: 1000555862}
   - component: {fileID: 1000555863}
   m_Layer: 6
-  m_Name: VideoCast
+  m_Name: VideoRemoval
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
