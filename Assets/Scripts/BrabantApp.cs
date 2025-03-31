@@ -88,39 +88,40 @@ public class BrabantApp : MonoBehaviour
             KeepAlive.Instance.StoredGuardian.FirstName = guardianFields[0].text;
             KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
         }
-
-        IWebRequestReponse webRequestResponse = await patientApiClient.Create(KeepAlive.Instance.StoredPatient);
-
-        switch (webRequestResponse)
+        if (KeepAlive.Instance.UserToken != "")
         {
-            case WebRequestData<Patient> dataResponse:
-                // TODO: Handle succes scenario.
-                break;
-            case WebRequestError errorResponse:
-                string errorMessage = errorResponse.ErrorMessage;
-                Debug.Log("Create patient error: " + errorMessage);
-                // TODO: Handle error scenario. Show the errormessage to the user.
-                break;
-            default:
-                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+            IWebRequestReponse webRequestResponse = await patientApiClient.Create(KeepAlive.Instance.StoredPatient);
+
+            switch (webRequestResponse)
+            {
+                case WebRequestData<Patient> dataResponse:
+                    // TODO: Handle succes scenario.
+                    break;
+                case WebRequestError errorResponse:
+                    string errorMessage = errorResponse.ErrorMessage;
+                    Debug.Log("Create patient error: " + errorMessage);
+                    // TODO: Handle error scenario. Show the errormessage to the user.
+                    break;
+                default:
+                    throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+            }
+
+            webRequestResponse = await guardianApiClient.Create(KeepAlive.Instance.StoredGuardian);
+
+            switch (webRequestResponse)
+            {
+                case WebRequestData<Guardian> dataResponse:
+                    // TODO: Handle succes scenario.
+                    break;
+                case WebRequestError errorResponse:
+                    string errorMessage = errorResponse.ErrorMessage;
+                    Debug.Log("Create guardian error: " + errorMessage);
+                    // TODO: Handle error scenario. Show the errormessage to the user.
+                    break;
+                default:
+                    throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+            }
         }
-
-        webRequestResponse = await guardianApiClient.Create(KeepAlive.Instance.StoredGuardian);
-
-        switch (webRequestResponse)
-        {
-            case WebRequestData<Guardian> dataResponse:
-                // TODO: Handle succes scenario.
-                break;
-            case WebRequestError errorResponse:
-                string errorMessage = errorResponse.ErrorMessage;
-                Debug.Log("Create guardian error: " + errorMessage);
-                // TODO: Handle error scenario. Show the errormessage to the user.
-                break;
-            default:
-                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
-        }
-
         updateUI();
     }
 
@@ -178,7 +179,7 @@ public class BrabantApp : MonoBehaviour
             return null;
         }
     }
-        public TMP_InputField[] GetAccountInputFieldsFromGameObject(GameObject mainGameObject)
+    public TMP_InputField[] GetAccountInputFieldsFromGameObject(GameObject mainGameObject)
     {
         if (mainGameObject != null)
         {

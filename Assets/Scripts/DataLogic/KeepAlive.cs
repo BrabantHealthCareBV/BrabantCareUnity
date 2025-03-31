@@ -9,7 +9,7 @@ public class KeepAlive : MonoBehaviour
     public Doctor StoredDoctor { get; set; } = new();
     public Guardian StoredGuardian { get; set; } = new();
     public Patient StoredPatient { get; set; } = new();
-    public string UserToken { get; set; } = "";
+    public string UserToken = "";
 
     void Awake()
     {

@@ -33,7 +33,7 @@ public static class TestdataGenerator
         };
     }
 
-    public static Patient GeneratePatient(string guardianID, string? doctorID)
+    public static Patient GeneratePatient(string guardianID, string doctorID)
     {
         return new Patient
         {
