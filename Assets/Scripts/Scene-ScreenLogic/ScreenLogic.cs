@@ -14,7 +14,6 @@ public class ScreenLogic : MonoBehaviour
 
     void Start()
     {
-        // Initially, show the begin screen
         ShowBeginScreen();
     }
 
@@ -77,7 +76,7 @@ public class ScreenLogic : MonoBehaviour
     {
 
         // If there is no data in the DataHandler, go to the Login screen
-        if (KeepAlive.Instance.StoredPatient == null || KeepAlive.Instance.StoredGuardian == null)
+        if (KeepAlive.Instance.UserToken == "" || KeepAlive.Instance.StoredGuardian == null)
         {
             ShowLoginScreen();
         }

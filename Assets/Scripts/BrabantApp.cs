@@ -9,9 +9,10 @@ public class BrabantApp : MonoBehaviour
 
     [Header("Dependencies")]
     public UserApiClient userApiClient;
+    public ScreenLogic screenLogic;
 
     [Header("Settings")]
-    public bool GenerateDate = true;
+    public bool GenerateDate;
     public bool requiresSurgery;
 
     [Header("User Edit fields")]
@@ -23,12 +24,12 @@ public class BrabantApp : MonoBehaviour
     [Header("User Login fields")]
     public GameObject AccountLoginRegion;
     private TMP_InputField[] LoginFields;
-    private TMP_InputField[] RegisterFields;
 
     [Header("User Register fields")]
+    public GameObject AccountRegisterRegion;
     public GameObject PatientRegisterRegion;
     public GameObject GaurdianRegisterRegion;
-    public GameObject AccountRegisterRegion;
+    private TMP_InputField[] RegisterFields;
     private TMP_InputField[] PatientRegisterFields;
     private TMP_InputField[] GuardianRegisterFields;
 
@@ -40,11 +41,12 @@ public class BrabantApp : MonoBehaviour
     {
         PatientFields = GetInputFieldsFromGameObject(PatientRegion);
         GuardianFields = GetInputFieldsFromGameObject(GaurdianRegion);
+        PatientRegisterFields = GetInputFieldsFromGameObject(PatientRegisterRegion);
+        GuardianRegisterFields = GetInputFieldsFromGameObject(GaurdianRegisterRegion);
+
         LoginFields = GetAccountInputFieldsFromGameObject(AccountLoginRegion);
         RegisterFields = GetAccountInputFieldsFromGameObject(AccountRegisterRegion);
 
-        PatientRegisterFields = GetInputFieldsFromGameObject(PatientRegisterRegion);
-        GuardianRegisterFields = GetInputFieldsFromGameObject(GaurdianRegisterRegion);
 
         if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
         {
@@ -71,13 +73,13 @@ public class BrabantApp : MonoBehaviour
     {
 
         // Update Patient fields (name and surname)
-        if (patientFields != null && patientFields.Length >= 2)
+        if (patientFields[0] != null && patientFields.Length >= 2)
         {
             KeepAlive.Instance.StoredPatient.FirstName = patientFields[0].text;
             KeepAlive.Instance.StoredPatient.LastName = patientFields[1].text;
         }
 
-        if (guardianFields != null && guardianFields.Length >= 2)
+        if (guardianFields[0] != null && guardianFields.Length >= 2)
         {
             KeepAlive.Instance.StoredGuardian.FirstName = guardianFields[0].text;
             KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
@@ -150,6 +152,7 @@ public class BrabantApp : MonoBehaviour
             {
                 Debug.LogError("Name field or surname field is missing.");
             }
+
 
             return new TMP_InputField[] { nameField, surnameField };
         }
@@ -229,6 +232,27 @@ public class BrabantApp : MonoBehaviour
         {
             case WebRequestData<string> dataResponse:
                 Debug.Log("Register succes!");
+                //screenLogic.ShowHomeScreen();
+                //Login();\
+                IWebRequestReponse loginWebRequestResponse = await userApiClient.Login(user);
+
+                switch (loginWebRequestResponse)
+                {
+                    case WebRequestData<string> loginDataResponse:
+                        Debug.Log("Login succes!");
+                        screenLogic.ShowHomeScreen();
+                        // TODO: Todo handle succes scenario.
+                        // TODO: doorverwijzen naar de tijdlijn.
+                        break;
+                    case WebRequestError errorResponse:
+                        string loginErrorMessage = errorResponse.ErrorMessage;
+                        Debug.Log("Login error: " + loginErrorMessage);
+                        // TODO: Handle error scenario. Show the errormessage to the user.
+                        //messageText.text = "Login error: " + loginErrorMessage;
+                        break;
+                    default:
+                        throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + loginWebRequestResponse.GetType());
+                }
                 // TODO: Handle succes scenario;
                 //messageText.text = "Register succes!";
                 break;
@@ -236,10 +260,10 @@ public class BrabantApp : MonoBehaviour
                 string errorMessage = errorResponse.ErrorMessage;
                 Debug.Log("Register error: " + errorMessage);
                 // TODO: Handle error scenario. Show the errormessage to the user.
-                //messageText.text = "Register error: " + errorMessage;
+                //messageText.text = "Register error: " + ErrorMessage;
                 break;
             default:
-                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+                throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + webRequestResponse.GetType());
         }
     }
 
@@ -254,6 +278,7 @@ public class BrabantApp : MonoBehaviour
         {
             case WebRequestData<string> dataResponse:
                 Debug.Log("Login succes!");
+                screenLogic.ShowHomeScreen();
                 // TODO: Todo handle succes scenario.
                 // TODO: doorverwijzen naar de tijdlijn.
                 break;
@@ -261,10 +286,10 @@ public class BrabantApp : MonoBehaviour
                 string errorMessage = errorResponse.ErrorMessage;
                 Debug.Log("Login error: " + errorMessage);
                 // TODO: Handle error scenario. Show the errormessage to the user.
-                //messageText.text = "Login error: " + errorMessage;
+                //messageText.text = "Login error: " + loginErrorMessage;
                 break;
             default:
-                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+                throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + webRequestResponse.GetType());
         }
     }
 

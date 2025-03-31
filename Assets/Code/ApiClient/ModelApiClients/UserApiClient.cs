@@ -31,7 +31,7 @@ public class UserApiClient : MonoBehaviour
             case WebRequestData<string> data:
                 Debug.Log("Response data raw: " + data.Data);
                 string token = JsonHelper.ExtractToken(data.Data);
-                webClient.SetToken(token);
+                KeepAlive.Instance.UserToken = token;
                 return new WebRequestData<string>("Succes");
             default:
                 return webRequestResponse;
