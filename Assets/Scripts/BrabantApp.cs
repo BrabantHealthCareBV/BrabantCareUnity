@@ -6,9 +6,13 @@ public class BrabantApp : MonoBehaviour
 {
     [Header("Test Data")]
     public User user;
+    public Guardian guardian;
+    public Patient patient;
 
     [Header("Dependencies")]
     public UserApiClient userApiClient;
+    public PatientApiClient patientApiClient;
+    public GuardianApiClient guardianApiClient;
     public ScreenLogic screenLogic;
 
     [Header("Settings")]
@@ -69,7 +73,7 @@ public class BrabantApp : MonoBehaviour
     }
 
 
-    public void saveData(TMP_InputField[] patientFields, TMP_InputField[] guardianFields)
+    public async void saveData(TMP_InputField[] patientFields, TMP_InputField[] guardianFields)
     {
 
         // Update Patient fields (name and surname)
@@ -84,6 +88,39 @@ public class BrabantApp : MonoBehaviour
             KeepAlive.Instance.StoredGuardian.FirstName = guardianFields[0].text;
             KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
         }
+
+        IWebRequestReponse webRequestResponse = await patientApiClient.Create(KeepAlive.Instance.StoredPatient);
+
+        switch (webRequestResponse)
+        {
+            case WebRequestData<Patient> dataResponse:
+                // TODO: Handle succes scenario.
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Create patient error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+        }
+
+        webRequestResponse = await guardianApiClient.Create(KeepAlive.Instance.StoredGuardian);
+
+        switch (webRequestResponse)
+        {
+            case WebRequestData<Guardian> dataResponse:
+                // TODO: Handle succes scenario.
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Create guardian error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+        }
+
         updateUI();
     }
 
@@ -226,14 +263,14 @@ public class BrabantApp : MonoBehaviour
     {
         user = new User(RegisterFields[0].text, RegisterFields[1].text);
 
+
         IWebRequestReponse webRequestResponse = await userApiClient.Register(user);
 
         switch (webRequestResponse)
         {
             case WebRequestData<string> dataResponse:
                 Debug.Log("Register succes!");
-                //screenLogic.ShowHomeScreen();
-                //Login();\
+
                 IWebRequestReponse loginWebRequestResponse = await userApiClient.Login(user);
 
                 switch (loginWebRequestResponse)

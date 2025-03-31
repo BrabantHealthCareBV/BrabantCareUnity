@@ -9028,6 +9028,8 @@ MonoBehaviour:
     email: 
     password: 
   userApiClient: {fileID: 2001857668}
+  patientApiClient: {fileID: 2001857671}
+  guardianApiClient: {fileID: 2001857672}
   screenLogic: {fileID: 344440128}
   GenerateDate: 0
   requiresSurgery: 0

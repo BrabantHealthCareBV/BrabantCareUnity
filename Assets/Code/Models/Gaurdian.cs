@@ -4,8 +4,19 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Guardian
 {
-    public Guid ID;
-    public string FirstName;
-    public string LastName;
-    public List<Guid> PatientIDs;
+    public string ID { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public List<string> PatientIDs { get; set; }
+    
+    public Guardian()
+    {
+
+    }
+
+    public Guardian(string FirstName, string LastName)
+    {
+        this.FirstName = FirstName;
+        this.LastName = LastName;
+    }
 }

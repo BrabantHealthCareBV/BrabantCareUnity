@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public static class TreatmentPlanCreator
 {
-    static public TreatmentPlan GenerateFractureTreatmentPlan(Guid patientID, Guid doctorID, bool requiresSurgery)
+    static public TreatmentPlan GenerateFractureTreatmentPlan(string patientID, string doctorID, bool requiresSurgery)
     {
-        Guid treatmentPlanID = Guid.NewGuid();
-        List<Guid> careMomentIDs = new List<Guid>();
+        string treatmentPlanID = Convert.ToString(Guid.NewGuid());
+        List<string> careMomentIDs = new List<string>();
         List<TreatmentPlan_CareMoment> treatmentPlanCareMoments = new List<TreatmentPlan_CareMoment>();
 
         List<string> generalSteps = new List<string>
@@ -55,7 +55,7 @@ public static class TreatmentPlanCreator
         // Generate care moments
         for (int i = 0; i < selectedSteps.Count; i++)
         {
-            Guid careMomentID = Guid.NewGuid();
+            string careMomentID = Convert.ToString(Guid.NewGuid());
             careMomentIDs.Add(careMomentID);
 
             CareMoment newCareMoment = new CareMoment
@@ -82,7 +82,7 @@ public static class TreatmentPlanCreator
         {
             ID = treatmentPlanID,
             Name = "Gipsbehandeling",
-            PatientIDs = new List<Guid> { patientID },
+            PatientIDs = new List<string> { patientID },
             CareMomentIDs = careMomentIDs
         };
 

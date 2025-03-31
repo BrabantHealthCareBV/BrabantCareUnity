@@ -18,7 +18,7 @@ public class PatientApiClient : MonoBehaviour
         return await webClient.SendPostRequest(Route, data);
     }
 
-    public async Awaitable<IWebRequestReponse> Delete(Guid id)
+    public async Awaitable<IWebRequestReponse> Delete(string id)
     {
         string route = $"{Route}/{id}";
         return await webClient.SendDeleteRequest(route);

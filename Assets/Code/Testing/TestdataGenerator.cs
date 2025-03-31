@@ -15,10 +15,10 @@ public static class TestdataGenerator
     {
         return new Doctor
         {
-            ID = Guid.NewGuid(),
+            ID = Convert.ToString(Guid.NewGuid()),
             Name = doctorNames[UnityEngine.Random.Range(0, doctorNames.Count)],
             Specialization = specializations[UnityEngine.Random.Range(0, specializations.Count)],
-            PatientIDs = new List<Guid>()
+            PatientIDs = new List<string>()
         };
     }
 
@@ -26,22 +26,22 @@ public static class TestdataGenerator
     {
         return new Guardian
         {
-            ID = Guid.NewGuid(),
+            ID = Convert.ToString(Guid.NewGuid()),
             FirstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
             LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
-            PatientIDs = new List<Guid>()
+            PatientIDs = new List<string>()
         };
     }
 
-    public static Patient GeneratePatient(Guid guardianID, Guid? doctorID)
+    public static Patient GeneratePatient(string guardianID, string? doctorID)
     {
         return new Patient
         {
-            ID = Guid.NewGuid(),
+            ID = Convert.ToString(Guid.NewGuid()),
             FirstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
             LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
             GuardianID = guardianID,
-            TreatmentPlanID = Guid.NewGuid(),
+            TreatmentPlanID = Convert.ToString(Guid.NewGuid()),
             DoctorID = doctorID
         };
     }
