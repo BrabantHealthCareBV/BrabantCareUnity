@@ -28,8 +28,7 @@ public static class TestdataGenerator
         {
             ID = Convert.ToString(Guid.NewGuid()),
             FirstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
-            LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
-            PatientIDs = new List<string>()
+            LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)]
         };
     }
 

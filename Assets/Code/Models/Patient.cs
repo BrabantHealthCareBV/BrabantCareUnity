@@ -10,16 +10,10 @@ public class Patient
     public DateTime NextAppointmentDate;
     public string GuardianID;
     public string TreatmentPlanID;
-    public string? DoctorID;
+    public string DoctorID;
 
     public Patient()
     {
 
-    }
-
-    public Patient(string FirstName, string LastName)
-    {
-        this.FirstName = FirstName;
-        this.LastName = LastName;
     }
 }

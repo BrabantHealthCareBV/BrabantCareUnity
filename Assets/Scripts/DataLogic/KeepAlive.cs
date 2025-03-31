@@ -9,7 +9,17 @@ public class KeepAlive : MonoBehaviour
     public Doctor StoredDoctor { get; set; } = new();
     public Guardian StoredGuardian { get; set; } = new();
     public Patient StoredPatient { get; set; } = new();
-    public string UserToken = "";
+
+    private string _userToken = "";
+    public string UserToken
+    {
+        get => _userToken;
+        set
+        {
+            _userToken = value;
+            UpdateWebClientToken(); // Call method whenever the token changes
+        }
+    }
 
     void Awake()
     {
@@ -21,17 +31,24 @@ public class KeepAlive : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded; // Subscribe to scene load event
         }
     }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        GameObject targetObject = GameObject.Find("WebClient");
+        UpdateWebClientToken(); // Ensure the token is updated when a new scene loads
+    }
+
+    private void UpdateWebClientToken()
+    {
+        GameObject targetObject = GameObject.Find("ApiClient");
         if (targetObject != null)
         {
             WebClient webClient = targetObject.GetComponent<WebClient>();
             if (webClient != null)
             {
-                webClient.SetToken(UserToken);
+                webClient.SetToken(_userToken);
             }
         }
     }

@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 public class WebClient : MonoBehaviour
 {
     public string baseUrl;
-    private string token;
+    public string token;
 
     public void SetToken(string token)
     {

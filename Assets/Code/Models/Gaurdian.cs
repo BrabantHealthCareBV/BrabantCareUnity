@@ -7,7 +7,6 @@ public class Guardian
     public string ID;
     public string FirstName;
     public string LastName;
-    public List<string> PatientIDs;
     
     public Guardian()
     {
