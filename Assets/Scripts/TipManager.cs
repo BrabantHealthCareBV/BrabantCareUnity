@@ -1,22 +1,37 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class TipManager : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown categoryDropdown;
     [SerializeField] private TMP_Text tipsText;
+    [SerializeField] private Image tipImage; // Image component voor de afbeelding
+
+    // Dictionary om categorieën te koppelen aan afbeeldingen
+    private Dictionary<string, Sprite> tipImages = new Dictionary<string, Sprite>();
 
     private void Start()
     {
-        var options = new System.Collections.Generic.List<string>
+        // Laad afbeeldingen (zorg dat ze in de Unity Inspector gekoppeld worden)
+        tipImages["Beenbreuk"] = Resources.Load<Sprite>("Images/Beenbreuk");
+        tipImages["Armbreuk"] = Resources.Load<Sprite>("Images/Armbreuk");
+        tipImages["Gips drooghouden"] = Resources.Load<Sprite>("Images/Douchehoes");
+        tipImages["Terug naar school"] = Resources.Load<Sprite>("Images/school");
+        tipImages["Jeuk"] = Resources.Load<Sprite>("Images/jeuk");
+        tipImages["Tintelend of doof gevoel"] = Resources.Load<Sprite>("Images/tintelend_gevoel");
+        tipImages["Gebroken gips"] = Resources.Load<Sprite>("Images/gebroken_gips");
+        tipImages["Gips knelt"] = Resources.Load<Sprite>("Images/gips_knelt");
+
+        var options = new List<string>
         {
             "Kies hier een categorie",
-            "Beenbreuk",
             "Armbreuk",
+            "Beenbreuk",
             "Gips drooghouden",
+            "Terug naar school",
             "Jeuk",
-            "Koude vingers of tenen",
-            "Blauwe/Witte vingers of tenen",
             "Tintelend of doof gevoel",
             "Gebroken gips",
             "Gips knelt"
@@ -26,6 +41,7 @@ public class TipManager : MonoBehaviour
         categoryDropdown.AddOptions(options);
         categoryDropdown.value = 0;
         tipsText.text = "";
+        tipImage.gameObject.SetActive(false); // Verberg afbeelding in het begin
         categoryDropdown.onValueChanged.AddListener(delegate { UpdateTips(); });
     }
 
@@ -36,11 +52,23 @@ public class TipManager : MonoBehaviour
         if (selectedIndex == 0)
         {
             tipsText.text = "";
+            tipImage.gameObject.SetActive(false);
             return;
         }
 
         string selectedCategory = categoryDropdown.options[selectedIndex].text;
         tipsText.text = GetTips(selectedCategory);
+
+        // Update afbeelding als er een bestaat
+        if (tipImages.ContainsKey(selectedCategory) && tipImages[selectedCategory] != null)
+        {
+            tipImage.sprite = tipImages[selectedCategory];
+            tipImage.gameObject.SetActive(true); // Toon afbeelding
+        }
+        else
+        {
+            tipImage.gameObject.SetActive(false); // Verberg als er geen afbeelding is
+        }
     }
 
     private string GetTips(string category)
@@ -59,23 +87,20 @@ public class TipManager : MonoBehaviour
                 return "- Zorg dat je gips droog blijft, gebruik een douchehoes.\n" +
                        "- Als het nat wordt, probeer het te drogen met een föhn.";
 
+            case "Terug naar school":
+                return "- Gebruik een plastic zak bij slecht weer om het gips droog te houden als het buiten nat is.\n" +
+                       "- Vermijd drukte tijdens het spelen of zoek een rustig een plekje tijdens de pauze.";
+
             case "Jeuk":
                 return "- Jeuk ontstaat door vocht tussen de huid en het gips.\n" +
                        "- Probeer te föhnen tussen het gips en de huid, maar gebruik geen scherpe voorwerpen.";
 
-            case "Koude vingers of tenen":
-                return "- Houd je hand/been 30 minuten hoog en beweeg goed.";
-
-            case "Blauwe/Witte vingers of tenen":
-                return "- Houd je hand/been 30 minuten hoog.\n" +
-                       "- Bij witte vingers/tenen: houd je hand/been juist lager.";
-
             case "Tintelend of doof gevoel":
-                return "- Houd je hand/been 30 minuten hoog en beweeg goed.\n" +
+                return "- Houd je hand/been 30 minuten hoog en beweeg goed. Doe dit ook als je koude vingers of tenen hebt. \n" +
                        "- Als je je vingers of tenen niet meer kunt bewegen, neem dan contact op met de gipskamer.";
 
             case "Gebroken gips":
-                return "- Neem direct contact op met de gipskamer of spoedeisende hulp.";
+                return "- Neem gelijk contact op met de Amphia gipskamer of spoedeisende hulp bij.";
 
             case "Gips knelt":
                 return "- Houd je arm/been 30 minuten hoog en beweeg je vingers/tenen.";
