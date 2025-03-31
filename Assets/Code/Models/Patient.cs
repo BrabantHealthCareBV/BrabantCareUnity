@@ -3,14 +3,14 @@ using System;
 [System.Serializable]
 public class Patient
 {
-    public string ID { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public DateTime BirthDate { get; set; }
-    public DateTime NextAppointmentDate { get; set; }
-    public string GuardianID { get; set; }
-    public string TreatmentPlanID { get; set; }
-    public string? DoctorID { get; set; }
+    public string ID;
+    public string FirstName;
+    public string LastName;
+    public DateTime BirthDate;
+    public DateTime NextAppointmentDate;
+    public string GuardianID;
+    public string TreatmentPlanID;
+    public string? DoctorID;
 
     public Patient()
     {
