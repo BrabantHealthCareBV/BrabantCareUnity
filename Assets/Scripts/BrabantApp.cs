@@ -14,28 +14,29 @@ public class BrabantApp : MonoBehaviour
     public PatientApiClient patientApiClient;
     public GuardianApiClient guardianApiClient;
     public ScreenLogic screenLogic;
+    public AccountScreenLogic accountScreenLogic;
 
     [Header("Settings")]
     public bool GenerateDate;
     public bool requiresSurgery;
 
-    [Header("User Edit fields")]
-    public GameObject PatientRegion;
-    public GameObject GaurdianRegion;
-    private TMP_InputField[] PatientFields;
-    private TMP_InputField[] GuardianFields;
+    //[Header("User Edit fields")]
+    //public GameObject PatientRegion;
+    //public GameObject GaurdianRegion;
+    //private TMP_InputField[] PatientFields;
+    //private TMP_InputField[] GuardianFields;
 
-    [Header("User Login fields")]
-    public GameObject AccountLoginRegion;
-    private TMP_InputField[] LoginFields;
+    //[Header("User Login fields")]
+    //public GameObject AccountLoginRegion;
+    //private TMP_InputField[] LoginFields;
 
-    [Header("User Register fields")]
-    public GameObject AccountRegisterRegion;
-    public GameObject PatientRegisterRegion;
-    public GameObject GaurdianRegisterRegion;
-    private TMP_InputField[] RegisterFields;
-    private TMP_InputField[] PatientRegisterFields;
-    private TMP_InputField[] GuardianRegisterFields;
+    //[Header("User Register fields")]
+    //public GameObject AccountRegisterRegion;
+    //public GameObject PatientRegisterRegion;
+    //public GameObject GaurdianRegisterRegion;
+    //private TMP_InputField[] RegisterFields;
+    //private TMP_InputField[] PatientRegisterFields;
+    //private TMP_InputField[] GuardianRegisterFields;
 
     [Header("Personal Info")]
     public TMP_Text personalInfo;
@@ -43,13 +44,13 @@ public class BrabantApp : MonoBehaviour
 
     void Start()
     {
-        PatientFields = GetInputFieldsFromGameObject(PatientRegion);
-        GuardianFields = GetInputFieldsFromGameObject(GaurdianRegion);
-        PatientRegisterFields = GetInputFieldsFromGameObject(PatientRegisterRegion);
-        GuardianRegisterFields = GetInputFieldsFromGameObject(GaurdianRegisterRegion);
+        //PatientFields = GetInputFieldsFromGameObject(PatientRegion);
+        //GuardianFields = GetInputFieldsFromGameObject(GaurdianRegion);
+        //PatientRegisterFields = GetInputFieldsFromGameObject(PatientRegisterRegion);
+        //GuardianRegisterFields = GetInputFieldsFromGameObject(GaurdianRegisterRegion);
 
-        LoginFields = GetAccountInputFieldsFromGameObject(AccountLoginRegion);
-        RegisterFields = GetAccountInputFieldsFromGameObject(AccountRegisterRegion);
+        //LoginFields = GetAccountInputFieldsFromGameObject(AccountLoginRegion);
+        //RegisterFields = GetAccountInputFieldsFromGameObject(AccountRegisterRegion);
 
 
         if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
@@ -67,30 +68,13 @@ public class BrabantApp : MonoBehaviour
 
         }
 
-        saveData(PatientFields, GuardianFields);
+        //saveData(PatientFields, GuardianFields);
 
-        AddFieldListeners();
+        //AddFieldListeners();
     }
 
 
-    public void saveData(TMP_InputField[] patientFields, TMP_InputField[] guardianFields)
-    {
-
-        // Update Patient fields (name and surname)
-        if (patientFields[0] != null && patientFields.Length >= 2)
-        {
-            KeepAlive.Instance.StoredPatient.FirstName = patientFields[0].text;
-            KeepAlive.Instance.StoredPatient.LastName = patientFields[1].text;
-        }
-
-        if (guardianFields[0] != null && guardianFields.Length >= 2)
-        {
-            KeepAlive.Instance.StoredGuardian.FirstName = guardianFields[0].text;
-            KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
-        }
-
-        updateUI();
-    }
+    
 
     public async void postData()
     {
@@ -132,18 +116,10 @@ public class BrabantApp : MonoBehaviour
 
     public void updateUI()
     {
-        if (PatientFields != null && PatientFields.Length >= 2)
-        {
-            PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;
-            PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;
-        }
-
-        if (GuardianFields != null && GuardianFields.Length >= 2)
-        {
-            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;
-            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;
-        }
-
+        if (KeepAlive.Instance == null)
+            return;
+        if (KeepAlive.Instance.StoredPatient == null)
+            return;
         string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}\n";
 
         string nextAppointment = "Next Appointment: ";
@@ -206,68 +182,12 @@ public class BrabantApp : MonoBehaviour
         }
     }
 
-    #region callbacks
-
-    private void AddFieldListeners()
-    {
-        if (PatientFields != null && PatientFields.Length >= 2)
-        {
-            PatientFields[0].onEndEdit.AddListener(delegate { OnPatientDataChanged(); });
-            PatientFields[1].onEndEdit.AddListener(delegate { OnPatientDataChanged(); });
-        }
-
-        if (GuardianFields != null && GuardianFields.Length >= 2)
-        {
-            GuardianFields[0].onEndEdit.AddListener(delegate { OnGuardianDataChanged(); });
-            GuardianFields[1].onEndEdit.AddListener(delegate { OnGuardianDataChanged(); });
-        }
-
-        // Register Fields Listeners
-        if (PatientRegisterFields != null && PatientRegisterFields.Length >= 2)
-        {
-            PatientRegisterFields[0].onEndEdit.AddListener(delegate { OnPatientRegisterDataChanged(); });
-            PatientRegisterFields[1].onEndEdit.AddListener(delegate { OnPatientRegisterDataChanged(); });
-        }
-
-        if (GuardianRegisterFields != null && GuardianRegisterFields.Length >= 2)
-        {
-            GuardianRegisterFields[0].onEndEdit.AddListener(delegate { OnGuardianRegisterDataChanged(); });
-            GuardianRegisterFields[1].onEndEdit.AddListener(delegate { OnGuardianRegisterDataChanged(); });
-        }
-    }
-
-
-    private void OnPatientDataChanged()
-    {
-        saveData(PatientFields, GuardianFields);
-        Debug.Log("Patient data updated in KeepAlive.");
-    }
-
-    private void OnGuardianDataChanged()
-    {
-        saveData(PatientFields, GuardianFields);
-        Debug.Log("Guardian data updated in KeepAlive.");
-    }
-
-    private void OnPatientRegisterDataChanged()
-    {
-        saveData(PatientRegisterFields, GuardianRegisterFields);
-        Debug.Log("Patient registration data updated in KeepAlive.");
-    }
-
-    private void OnGuardianRegisterDataChanged()
-    {
-        saveData(PatientRegisterFields, GuardianRegisterFields);
-        Debug.Log("Guardian registration data updated in KeepAlive.");
-    }
-    #endregion
-
     #region Login
 
     [ContextMenu("User/Register")]
     public async void Register()
     {
-        user = new User(RegisterFields[0].text, RegisterFields[1].text);
+        user = new User(accountScreenLogic.LoginFields[0].text, accountScreenLogic.LoginFields[1].text);
 
 
         IWebRequestReponse webRequestResponse = await userApiClient.Register(user);
@@ -313,7 +233,7 @@ public class BrabantApp : MonoBehaviour
     [ContextMenu("User/Login")]
     public async void Login()
     {
-        user = new User(LoginFields[0].text, LoginFields[1].text);
+        user = new User(accountScreenLogic.LoginFields[0].text, accountScreenLogic.LoginFields[1].text);
 
         IWebRequestReponse webRequestResponse = await userApiClient.Login(user);
 
