@@ -11,7 +11,7 @@ public class Button2D : MonoBehaviour
                 Application.OpenURL("https://www.amphia.nl/");
                 break;
             case 2:
-                Application.OpenURL("https://www.amphia.nl/patienten-en-bezoekers/kinderen/kinderen-7-12/iets-gebroken/");
+                Application.OpenURL("https://www.amphia.nl/patienten-en-bezoekers/kinderen/kinderen-7-12/iets-gebroken");
                 break;
             case 3:
                 Application.OpenURL("https://www.amphia.nl/folders/gipskamer-aandachtspunten-gips-kunststofverband");
