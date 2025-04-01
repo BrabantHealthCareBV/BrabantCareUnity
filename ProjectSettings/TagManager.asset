@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Door
+  - ItemPickup
   layers:
   - Default
   - TransparentFX
@@ -58,6 +60,9 @@ TagManager:
     locked: 0
   - name: WalkBehind
     uniqueID: 95250367
+    locked: 0
+  - name: Info
+    uniqueID: 2867746423
     locked: 0
   m_RenderingLayers:
   - Default
