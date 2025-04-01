@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     private Animator animator;
 
+    public void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
