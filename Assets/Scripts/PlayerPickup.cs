@@ -18,6 +18,6 @@ public class PlayerPickup : MonoBehaviour
 
     void UpdateCounterUI()
     {
-        itemCounterText.text = "Vormen verzameld: " + itemCount + "/80";
+        itemCounterText.text = "Vormen verzameld: " + itemCount + "/48";
     }
 }
