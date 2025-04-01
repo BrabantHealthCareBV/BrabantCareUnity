@@ -834,7 +834,36 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      rural-tileset-tilex_0: 8923129008846662615
+      rural-tileset-tilex_1: -2893178163849196373
+      rural-tileset-tilex_10: -6566119776087322296
+      rural-tileset-tilex_11: 3887652847631980362
+      rural-tileset-tilex_12: 4348861269809484392
+      rural-tileset-tilex_13: -1550414344652515216
+      rural-tileset-tilex_14: 4859899906654655861
+      rural-tileset-tilex_15: -2538544866756178466
+      rural-tileset-tilex_16: 4533744863298316204
+      rural-tileset-tilex_17: 3433708080482777905
+      rural-tileset-tilex_18: -4505630735100157003
+      rural-tileset-tilex_19: -1800831602342425641
+      rural-tileset-tilex_2: -3997780737707177733
+      rural-tileset-tilex_20: -5197486002045956523
+      rural-tileset-tilex_21: -8491315004113144085
+      rural-tileset-tilex_22: -9089405895396208954
+      rural-tileset-tilex_23: 6182513853724999244
+      rural-tileset-tilex_24: 4150034576609088240
+      rural-tileset-tilex_25: -4622015148889139846
+      rural-tileset-tilex_26: 8510622164888334386
+      rural-tileset-tilex_27: -3333027940169697992
+      rural-tileset-tilex_28: -5227817553847539
+      rural-tileset-tilex_3: -865991011103397064
+      rural-tileset-tilex_4: -1636182503855923796
+      rural-tileset-tilex_5: -458909146894106599
+      rural-tileset-tilex_6: -1855275834786463705
+      rural-tileset-tilex_7: 7123759154119547040
+      rural-tileset-tilex_8: -3740276944964330168
+      rural-tileset-tilex_9: -8283298538932023672
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
