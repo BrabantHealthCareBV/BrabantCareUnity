@@ -12,18 +12,18 @@ public class PatientApiClient : MonoBehaviour
         return await webClient.SendGetRequest(Route);
     }
 
-    public async Awaitable<IWebRequestReponse> Create(Patient patient)
+    public async Awaitable<IWebRequestReponse> CreatePatient(Patient patient)
     {
         string data = JsonUtility.ToJson(patient);
         return await webClient.SendPostRequest(Route, data);
     }
-    public async Awaitable<IWebRequestReponse> Update(Patient patient)
+    public async Awaitable<IWebRequestReponse> UpdatePatient(Patient patient)
     {
         string data = JsonUtility.ToJson(patient);
         return await webClient.SendPutRequest(Route, data);
     }
 
-    public async Awaitable<IWebRequestReponse> Delete(string id)
+    public async Awaitable<IWebRequestReponse> DeletePatient(string id)
     {
         string route = $"{Route}/{id}";
         return await webClient.SendDeleteRequest(route);

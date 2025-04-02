@@ -1,11 +1,16 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AccountScreenLogic : MonoBehaviour
 {
+    [Header("Dropdowns")]
+    public TMP_Dropdown patientDropdown;
+    public TMP_Dropdown guardianDropdown;
+
     [Header("Settings")]
     public string registerInfo;
     public string loginInfo;
@@ -42,6 +47,7 @@ public class AccountScreenLogic : MonoBehaviour
 
         AddFieldListeners();
         setRegisterState();
+        StartCoroutine(WaitForKeepAliveAndUpdateUI());
     }
 
     void OnEnable()
@@ -54,15 +60,76 @@ public class AccountScreenLogic : MonoBehaviour
         while (KeepAlive.Instance == null)
         {
             Debug.Log("Waiting for KeepAlive to initialize...");
-            yield return null; // Wait for the next frame
+            yield return null;
         }
 
-        Debug.Log("KeepAlive initialized! Updating UI.");
+        Debug.Log("KeepAlive initialized! Fetching data...");
+
+        brabantApp.FetchUserData();  // Fetch and populate data
+
+        PopulatePatientDropdown();
+        PopulateGuardianDropdown();
+
+        updateUI();  // Set UI with the first patient/guardian by default
+    }
+
+    private void PopulatePatientDropdown()
+    {
+        patientDropdown.ClearOptions();
+        List<string> options = new List<string>();
+
+        foreach (var patient in KeepAlive.Instance.StoredPatients)
+        {
+            options.Add($"{patient.FirstName} {patient.LastName}");
+        }
+
+        patientDropdown.AddOptions(options);
+        patientDropdown.onValueChanged.AddListener(OnPatientSelected);
+
+        if (options.Count > 0)
+            patientDropdown.value = 0; // Select first patient by default
+    }
+
+    private void PopulateGuardianDropdown()
+    {
+        guardianDropdown.ClearOptions();
+        List<string> options = new List<string>();
+
+        foreach (var guardian in KeepAlive.Instance.StoredGuardians)
+        {
+            options.Add($"{guardian.FirstName} {guardian.LastName}");
+        }
+
+        guardianDropdown.AddOptions(options);
+        guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
+
+        if (options.Count > 0)
+            guardianDropdown.value = 0; // Select first guardian by default
+    }
+
+    private void OnPatientSelected(int index)
+{
+    if (index < KeepAlive.Instance.StoredPatients.Count)
+    {
+        KeepAlive.Instance.SelectedPatient = KeepAlive.Instance.StoredPatients[index];
         updateUI();
     }
+}
+
+private void OnGuardianSelected(int index)
+{
+    if (index < KeepAlive.Instance.StoredGuardians.Count)
+    {
+        KeepAlive.Instance.SelectedGuardian = KeepAlive.Instance.StoredGuardians[index];
+        updateUI();
+    }
+}
+
+
+    #region statesetters
     public void setRegisterState()
     {
-        currentState = AccountState.Register; // Update the state
+        currentState = AccountState.Register; // UpdateGuardian the state
         PatientRegion.SetActive(true);
         GuardianRegion.SetActive(true);
         AccountLoginRegion.SetActive(true);
@@ -73,7 +140,7 @@ public class AccountScreenLogic : MonoBehaviour
 
     public void setLoginState()
     {
-        currentState = AccountState.Login; // Update the state
+        currentState = AccountState.Login; // UpdateGuardian the state
         PatientRegion.SetActive(false);
         GuardianRegion.SetActive(false);
         AccountLoginRegion.SetActive(true);
@@ -84,7 +151,7 @@ public class AccountScreenLogic : MonoBehaviour
 
     public void setEditState()
     {
-        currentState = AccountState.Edit; // Update the state
+        currentState = AccountState.Edit; // UpdateGuardian the state
         PatientRegion.SetActive(true);
         GuardianRegion.SetActive(true);
         AccountLoginRegion.SetActive(false);
@@ -103,7 +170,7 @@ public class AccountScreenLogic : MonoBehaviour
                 : new Vector3(1, 1, 1);
         }
     }
-
+#endregion
     public void updateUI()
     {
         if (PatientFields != null && PatientFields.Length >= 2)
@@ -133,7 +200,7 @@ public class AccountScreenLogic : MonoBehaviour
     public void saveData(TMP_InputField[] patientFields, TMP_InputField[] guardianFields)
     {
 
-        // Update Patient fields (name and surname)
+        // UpdateGuardian Patient fields (name and surname)
         if (patientFields[0] != null && patientFields.Length >= 2)
         {
             KeepAlive.Instance.StoredPatient.FirstName = patientFields[0].text;
@@ -149,6 +216,8 @@ public class AccountScreenLogic : MonoBehaviour
         updateUI();
     }
 
+
+    #region buttons
     public void registerButtonClick()
     {
         if (currentState == AccountState.Register)
@@ -180,7 +249,7 @@ public class AccountScreenLogic : MonoBehaviour
             brabantApp.postData();
         }
     }
-
+#endregion
 
     #region helpermethods
 

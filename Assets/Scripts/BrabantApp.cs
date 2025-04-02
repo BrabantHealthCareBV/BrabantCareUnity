@@ -27,31 +27,31 @@ public class BrabantApp : MonoBehaviour
 
     void Start()
     {
-        if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
-        {
-            KeepAlive.Instance.StoredDoctor = TestdataGenerator.GenerateDoctor();
-            KeepAlive.Instance.StoredGuardian = TestdataGenerator.GenerateGuardian();
-            KeepAlive.Instance.StoredPatient = TestdataGenerator.GeneratePatient(
-                KeepAlive.Instance.StoredGuardian.ID,
-                KeepAlive.Instance.StoredDoctor.ID
-            );
+        //if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
+        //{
+        //    KeepAlive.Instance.StoredDoctor = TestdataGenerator.GenerateDoctor();
+        //    KeepAlive.Instance.StoredGuardian = TestdataGenerator.GenerateGuardian();
+        //    KeepAlive.Instance.StoredPatient = TestdataGenerator.GeneratePatient(
+        //        KeepAlive.Instance.StoredGuardian.ID,
+        //        KeepAlive.Instance.StoredDoctor.ID
+        //    );
 
-            Debug.Log($"Generated Doctor: {KeepAlive.Instance.StoredDoctor.Name}, Specialization: {KeepAlive.Instance.StoredDoctor.Specialization}, ID: {KeepAlive.Instance.StoredDoctor.ID}");
-            Debug.Log($"Generated Guardian: {KeepAlive.Instance.StoredGuardian.FirstName} {KeepAlive.Instance.StoredGuardian.LastName}, ID: {KeepAlive.Instance.StoredGuardian.ID}");
-            Debug.Log($"Generated Patient: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}, GuardianID: {KeepAlive.Instance.StoredPatient.GuardianID}, DoctorID: {KeepAlive.Instance.StoredPatient.DoctorID}");
+        //    Debug.Log($"Generated Doctor: {KeepAlive.Instance.StoredDoctor.Name}, Specialization: {KeepAlive.Instance.StoredDoctor.Specialization}, ID: {KeepAlive.Instance.StoredDoctor.ID}");
+        //    Debug.Log($"Generated Guardian: {KeepAlive.Instance.StoredGuardian.FirstName} {KeepAlive.Instance.StoredGuardian.LastName}, ID: {KeepAlive.Instance.StoredGuardian.ID}");
+        //    Debug.Log($"Generated Patient: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}, GuardianID: {KeepAlive.Instance.StoredPatient.GuardianID}, DoctorID: {KeepAlive.Instance.StoredPatient.DoctorID}");
 
-        }
+        //}
         FetchUserData();
     }
 
 
-    
+
 
     public async void postData()
     {
         if (KeepAlive.Instance.UserToken != "")
         {
-            IWebRequestReponse webRequestResponse = await patientApiClient.Create(KeepAlive.Instance.StoredPatient);
+            IWebRequestReponse webRequestResponse = await patientApiClient.CreatePatient(KeepAlive.Instance.StoredPatient);
 
             switch (webRequestResponse)
             {
@@ -60,14 +60,14 @@ public class BrabantApp : MonoBehaviour
                     break;
                 case WebRequestError errorResponse:
                     string errorMessage = errorResponse.ErrorMessage;
-                    Debug.Log("Create patient error: " + errorMessage);
+                    Debug.Log("CreateGuardian patient error: " + errorMessage);
                     // TODO: Handle error scenario. Show the errormessage to the user.
                     break;
                 default:
                     throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
             }
 
-            webRequestResponse = await guardianApiClient.Create(KeepAlive.Instance.StoredGuardian);
+            webRequestResponse = await guardianApiClient.CreateGuardian(KeepAlive.Instance.StoredGuardian);
 
             switch (webRequestResponse)
             {
@@ -76,7 +76,7 @@ public class BrabantApp : MonoBehaviour
                     break;
                 case WebRequestError errorResponse:
                     string errorMessage = errorResponse.ErrorMessage;
-                    Debug.Log("Create guardian error: " + errorMessage);
+                    Debug.Log("CreateGuardian guardian error: " + errorMessage);
                     // TODO: Handle error scenario. Show the errormessage to the user.
                     break;
                 default:
@@ -100,7 +100,7 @@ public class BrabantApp : MonoBehaviour
         if (patientResponse is WebRequestData<List<Patient>> patientData && patientData.Data != null)
         {
             // Filter for the correct patient (adjust this based on your API structure)
-            KeepAlive.Instance.StoredPatient = patientData.Data.FirstOrDefault(p => p.UserID == KeepAlive.Instance.StoredPatient.UserID);
+            //KeepAlive.Instance.StoredPatient = patientData.Data.FirstOrDefault(p => p.UserID == KeepAlive.Instance.StoredPatient.UserID);
 
             if (KeepAlive.Instance.StoredPatient != null)
             {
@@ -118,7 +118,7 @@ public class BrabantApp : MonoBehaviour
         }
 
         // Fetch guardian data
-        IWebRequestReponse guardianResponse = await guardianApiClient.GetAll();
+        IWebRequestReponse guardianResponse = await guardianApiClient.GetAllGuardian();
         if (guardianResponse is WebRequestData<List<Guardian>> guardianData && guardianData.Data != null)
         {
             // Filter for the correct guardian
@@ -139,7 +139,7 @@ public class BrabantApp : MonoBehaviour
             Debug.LogError($"Error fetching guardian data: {guardianError.ErrorMessage}");
         }
 
-        // Update UI after fetching data
+        // UpdateGuardian UI after fetching data
         updateUI();
     }
 
@@ -172,25 +172,25 @@ public class BrabantApp : MonoBehaviour
         // Check if patient already exists, if so, update instead of create
         if (KeepAlive.Instance.StoredPatient.ID != "")
         {
-            var patientResponse = await patientApiClient.Update(KeepAlive.Instance.StoredPatient);
-            HandleApiResponse(patientResponse, "Update patient");
+            var patientResponse = await patientApiClient.UpdatePatient(KeepAlive.Instance.StoredPatient);
+            HandleApiResponse(patientResponse, "UpdateGuardian patient");
         }
         else
         {
-            var patientResponse = await patientApiClient.Create(KeepAlive.Instance.StoredPatient);
-            HandleApiResponse(patientResponse, "Create patient");
+            var patientResponse = await patientApiClient.CreatePatient(KeepAlive.Instance.StoredPatient);
+            HandleApiResponse(patientResponse, "CreateGuardian patient");
         }
 
         // Check if guardian already exists, if so, update instead of create
         if (KeepAlive.Instance.StoredGuardian.ID != "")
         {
-            var guardianResponse = await guardianApiClient.Update(KeepAlive.Instance.StoredGuardian);
-            HandleApiResponse(guardianResponse, "Update guardian");
+            var guardianResponse = await guardianApiClient.UpdateGuardian(KeepAlive.Instance.StoredGuardian);
+            HandleApiResponse(guardianResponse, "UpdateGuardian guardian");
         }
         else
         {
-            var guardianResponse = await guardianApiClient.Create(KeepAlive.Instance.StoredGuardian);
-            HandleApiResponse(guardianResponse, "Create guardian");
+            var guardianResponse = await guardianApiClient.CreateGuardian(KeepAlive.Instance.StoredGuardian);
+            HandleApiResponse(guardianResponse, "CreateGuardian guardian");
         }
     }
 
@@ -233,7 +233,10 @@ public class BrabantApp : MonoBehaviour
                 {
                     case WebRequestData<string> loginDataResponse:
                         Debug.Log("Login succes!");
+
+                        FetchUserData();
                         screenLogic.ShowHomeScreen();
+
                         // TODO: Todo handle succes scenario.
                         // TODO: doorverwijzen naar de tijdlijn.
                         break;
@@ -271,6 +274,7 @@ public class BrabantApp : MonoBehaviour
         {
             case WebRequestData<string> dataResponse:
                 Debug.Log("Login succes!");
+                FetchUserData();
                 screenLogic.ShowHomeScreen();
                 // TODO: Todo handle succes scenario.
                 // TODO: doorverwijzen naar de tijdlijn.
