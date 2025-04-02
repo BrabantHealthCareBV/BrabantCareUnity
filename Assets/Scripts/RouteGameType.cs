@@ -4,12 +4,34 @@ using UnityEngine;
 public class RouteGameType : MonoBehaviour
 {
     public string route;
-    private string routeChoise = "routeB";
+    private string routeChoice = "routeA";
     public GameObject doorclosed;
     public GameObject doorOpen;
+    public GameObject GreyAreaA;
+    public GameObject GreyAreaB;
+    
+    public void GreyAreaActivation()
+    { 
+        if (routeChoice == "routeA")
+        {
+            GreyAreaA.SetActive(false);
+            GreyAreaB.SetActive(true);
+        }
+        else if (routeChoice == "routeB")
+        {
+            GreyAreaB.SetActive(false);
+            GreyAreaA.SetActive(true);
+        }
+    }
+
+    public void Start()
+    {
+        GreyAreaActivation();
+    }
+
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (route == "routeA" && routeChoise == "routeA")
+        if (route == "routeA" && routeChoice == "routeA")
         {
             Debug.Log("RouteA");
             if (other.CompareTag("Player"))
@@ -19,7 +41,7 @@ public class RouteGameType : MonoBehaviour
                 doorclosed.SetActive(false);
             }
         }
-        else if (route == "routeB" && routeChoise == "routeB")
+        else if (route == "routeB" && routeChoice == "routeB")
         {
             Debug.Log("RouteB");
             if (other.CompareTag("Player"))
@@ -32,7 +54,7 @@ public class RouteGameType : MonoBehaviour
     }
     public void OnTriggerExit2D(Collider2D other)
     {
-        if (route == "routeA" && routeChoise == "routeA")
+        if (route == "routeA" && routeChoice == "routeA")
         {
             Debug.Log("RouteA");
             if (other.CompareTag("Player"))
@@ -42,7 +64,7 @@ public class RouteGameType : MonoBehaviour
                 doorclosed.SetActive(true);
             }
         }
-        else if (route == "routeB" && routeChoise == "routeB")
+        else if (route == "routeB" && routeChoice == "routeB")
         {
             Debug.Log("RouteB");
             if (other.CompareTag("Player"))

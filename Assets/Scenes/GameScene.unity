@@ -3074,6 +3074,8 @@ MonoBehaviour:
   route: routeA
   doorclosed: {fileID: 1481143159}
   doorOpen: {fileID: 359802730}
+  GreyAreaA: {fileID: 0}
+  GreyAreaB: {fileID: 0}
 --- !u!1 &160299335
 GameObject:
   m_ObjectHideFlags: 0
@@ -25737,6 +25739,55 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!1 &786676831
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 786676832}
+  - component: {fileID: 786676833}
+  m_Layer: 0
+  m_Name: GlowManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &786676832
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786676831}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1102788852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &786676833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786676831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1af3aa4d5bd114647a99914db562d9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  route: 
+  doorclosed: {fileID: 0}
+  doorOpen: {fileID: 0}
+  GreyAreaA: {fileID: 1002150147}
+  GreyAreaB: {fileID: 2127548513}
 --- !u!1 &790511783
 GameObject:
   m_ObjectHideFlags: 0
@@ -29649,7 +29700,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1002150148}
-  - component: {fileID: 1002150149}
   m_Layer: 0
   m_Name: GreyglowA
   m_TagString: Untagged
@@ -29675,21 +29725,6 @@ Transform:
   - {fileID: 759045999}
   m_Father: {fileID: 1102788852}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1002150149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1002150147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1af3aa4d5bd114647a99914db562d9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  route: routeA
-  doorclosed: {fileID: 0}
-  doorOpen: {fileID: 0}
 --- !u!1 &1010209290
 GameObject:
   m_ObjectHideFlags: 0
@@ -32369,6 +32404,7 @@ Transform:
   - {fileID: 144045889}
   - {fileID: 1341295267}
   - {fileID: 1571753656}
+  - {fileID: 786676832}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1106842620
@@ -36988,6 +37024,8 @@ MonoBehaviour:
   route: routeB
   doorclosed: {fileID: 547897474}
   doorOpen: {fileID: 2145884345}
+  GreyAreaA: {fileID: 0}
+  GreyAreaB: {fileID: 0}
 --- !u!1 &1355120927
 GameObject:
   m_ObjectHideFlags: 0
@@ -38513,6 +38551,8 @@ MonoBehaviour:
   route: routeB
   doorclosed: {fileID: 1414369199}
   doorOpen: {fileID: 550307803}
+  GreyAreaA: {fileID: 0}
+  GreyAreaB: {fileID: 0}
 --- !u!1001 &1427418417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40113,6 +40153,8 @@ MonoBehaviour:
   route: routeA
   doorclosed: {fileID: 611338786}
   doorOpen: {fileID: 1034700672}
+  GreyAreaA: {fileID: 0}
+  GreyAreaB: {fileID: 0}
 --- !u!1 &1520890975
 GameObject:
   m_ObjectHideFlags: 0
@@ -104992,7 +105034,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2127548514}
-  - component: {fileID: 2127548515}
   m_Layer: 0
   m_Name: GreyglowB
   m_TagString: Untagged
@@ -105016,21 +105057,6 @@ Transform:
   - {fileID: 601320987}
   m_Father: {fileID: 1102788852}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2127548515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2127548513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1af3aa4d5bd114647a99914db562d9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  route: routeB
-  doorclosed: {fileID: 0}
-  doorOpen: {fileID: 0}
 --- !u!1 &2127937555
 GameObject:
   m_ObjectHideFlags: 0
