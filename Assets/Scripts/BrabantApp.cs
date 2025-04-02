@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -19,40 +21,12 @@ public class BrabantApp : MonoBehaviour
     [Header("Settings")]
     public bool GenerateDate;
     public bool requiresSurgery;
-
-    //[Header("User Edit fields")]
-    //public GameObject PatientRegion;
-    //public GameObject GaurdianRegion;
-    //private TMP_InputField[] PatientFields;
-    //private TMP_InputField[] GuardianFields;
-
-    //[Header("User Login fields")]
-    //public GameObject AccountLoginRegion;
-    //private TMP_InputField[] LoginFields;
-
-    //[Header("User Register fields")]
-    //public GameObject AccountRegisterRegion;
-    //public GameObject PatientRegisterRegion;
-    //public GameObject GaurdianRegisterRegion;
-    //private TMP_InputField[] RegisterFields;
-    //private TMP_InputField[] PatientRegisterFields;
-    //private TMP_InputField[] GuardianRegisterFields;
-
     [Header("Personal Info")]
     public TMP_Text personalInfo;
 
 
     void Start()
     {
-        //PatientFields = GetInputFieldsFromGameObject(PatientRegion);
-        //GuardianFields = GetInputFieldsFromGameObject(GaurdianRegion);
-        //PatientRegisterFields = GetInputFieldsFromGameObject(PatientRegisterRegion);
-        //GuardianRegisterFields = GetInputFieldsFromGameObject(GaurdianRegisterRegion);
-
-        //LoginFields = GetAccountInputFieldsFromGameObject(AccountLoginRegion);
-        //RegisterFields = GetAccountInputFieldsFromGameObject(AccountRegisterRegion);
-
-
         if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
         {
             KeepAlive.Instance.StoredDoctor = TestdataGenerator.GenerateDoctor();
@@ -67,10 +41,7 @@ public class BrabantApp : MonoBehaviour
             Debug.Log($"Generated Patient: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}, GuardianID: {KeepAlive.Instance.StoredPatient.GuardianID}, DoctorID: {KeepAlive.Instance.StoredPatient.DoctorID}");
 
         }
-
-        //saveData(PatientFields, GuardianFields);
-
-        //AddFieldListeners();
+        FetchUserData();
     }
 
 
@@ -114,20 +85,122 @@ public class BrabantApp : MonoBehaviour
         }
     }
 
+    public async void FetchUserData()
+    {
+        if (string.IsNullOrEmpty(KeepAlive.Instance.UserToken))
+        {
+            Debug.Log("User is not logged in. Skipping data fetch.");
+            return;
+        }
+
+        Debug.Log("Fetching user data...");
+
+        // Fetch patient data
+        IWebRequestReponse patientResponse = await patientApiClient.GetAll();
+        if (patientResponse is WebRequestData<List<Patient>> patientData && patientData.Data != null)
+        {
+            // Filter for the correct patient (adjust this based on your API structure)
+            KeepAlive.Instance.StoredPatient = patientData.Data.FirstOrDefault(p => p.UserID == KeepAlive.Instance.StoredPatient.UserID);
+
+            if (KeepAlive.Instance.StoredPatient != null)
+            {
+                Debug.Log("Fetched existing patient data.");
+            }
+            else
+            {
+                KeepAlive.Instance.StoredPatient = new Patient();
+                Debug.Log("No matching patient found. Created new empty patient.");
+            }
+        }
+        else if (patientResponse is WebRequestError patientError)
+        {
+            Debug.LogError($"Error fetching patient data: {patientError.ErrorMessage}");
+        }
+
+        // Fetch guardian data
+        IWebRequestReponse guardianResponse = await guardianApiClient.GetAll();
+        if (guardianResponse is WebRequestData<List<Guardian>> guardianData && guardianData.Data != null)
+        {
+            // Filter for the correct guardian
+            KeepAlive.Instance.StoredGuardian = guardianData.Data.FirstOrDefault(g => g.ID == KeepAlive.Instance.StoredPatient.GuardianID);
+
+            if (KeepAlive.Instance.StoredGuardian != null)
+            {
+                Debug.Log("Fetched existing guardian data.");
+            }
+            else
+            {
+                KeepAlive.Instance.StoredGuardian = new Guardian();
+                Debug.Log("No matching guardian found. Created new empty guardian.");
+            }
+        }
+        else if (guardianResponse is WebRequestError guardianError)
+        {
+            Debug.LogError($"Error fetching guardian data: {guardianError.ErrorMessage}");
+        }
+
+        // Update UI after fetching data
+        updateUI();
+    }
+
+
+    private void HandleApiResponse(IWebRequestReponse response, string action)
+    {
+        switch (response)
+        {
+            case WebRequestData<object> successResponse:
+                Debug.Log($"{action} success.");
+                break;
+            case WebRequestError errorResponse:
+                Debug.LogError($"{action} error: {errorResponse.ErrorMessage}");
+                break;
+            default:
+                throw new NotImplementedException($"No implementation for response type: {response.GetType()}");
+        }
+    }
+
+    public async void SaveData()
+    {
+        if (string.IsNullOrEmpty(KeepAlive.Instance.UserToken))
+        {
+            Debug.Log("User is not logged in. Cannot save data.");
+            return;
+        }
+
+        Debug.Log("Saving user data...");
+
+        // Check if patient already exists, if so, update instead of create
+        if (KeepAlive.Instance.StoredPatient.ID != "")
+        {
+            var patientResponse = await patientApiClient.Update(KeepAlive.Instance.StoredPatient);
+            HandleApiResponse(patientResponse, "Update patient");
+        }
+        else
+        {
+            var patientResponse = await patientApiClient.Create(KeepAlive.Instance.StoredPatient);
+            HandleApiResponse(patientResponse, "Create patient");
+        }
+
+        // Check if guardian already exists, if so, update instead of create
+        if (KeepAlive.Instance.StoredGuardian.ID != "")
+        {
+            var guardianResponse = await guardianApiClient.Update(KeepAlive.Instance.StoredGuardian);
+            HandleApiResponse(guardianResponse, "Update guardian");
+        }
+        else
+        {
+            var guardianResponse = await guardianApiClient.Create(KeepAlive.Instance.StoredGuardian);
+            HandleApiResponse(guardianResponse, "Create guardian");
+        }
+    }
+
     public void updateUI()
     {
-        if (KeepAlive.Instance == null)
-            return;
         if (KeepAlive.Instance.StoredPatient == null)
             return;
+
         string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}\n";
-
-        string nextAppointment = "Next Appointment: ";
-
-        string appointmentDate = "TBD";
-        nextAppointment += appointmentDate;
-
-        patientInfo += nextAppointment;
+        patientInfo += "Next Appointment: TBD";
 
         if (personalInfo != null)
         {
@@ -136,49 +209,6 @@ public class BrabantApp : MonoBehaviour
         else
         {
             Debug.LogError("PersonalInfo TMP_Text component is not assigned.");
-        }
-    }
-
-    public TMP_InputField[] GetInputFieldsFromGameObject(GameObject mainGameObject)
-    {
-        Transform fieldsGameObject = mainGameObject.transform.Find("Fields");
-        if (fieldsGameObject != null)
-        {
-            TMP_InputField nameField = fieldsGameObject.Find("NameField")?.GetComponent<TMP_InputField>();
-            TMP_InputField surnameField = fieldsGameObject.Find("SurnameField")?.GetComponent<TMP_InputField>();
-
-            if (nameField == null || surnameField == null)
-            {
-                Debug.LogError("Name field or surname field is missing.");
-            }
-
-            return new TMP_InputField[] { nameField, surnameField };
-        }
-        else
-        {
-            Debug.LogWarning("Fields not found in mainGameObject");
-            return null;
-        }
-    }
-    public TMP_InputField[] GetAccountInputFieldsFromGameObject(GameObject mainGameObject)
-    {
-        if (mainGameObject != null)
-        {
-            TMP_InputField nameField = mainGameObject.transform.Find("UsernameInput")?.GetComponent<TMP_InputField>();
-            TMP_InputField surnameField = mainGameObject.transform.Find("PasswordInput")?.GetComponent<TMP_InputField>();
-
-            if (nameField == null || surnameField == null)
-            {
-                Debug.LogError("Name field or surname field is missing.");
-            }
-
-
-            return new TMP_InputField[] { nameField, surnameField };
-        }
-        else
-        {
-            Debug.LogWarning("Fields not found in mainGameObject");
-            return null;
         }
     }
 

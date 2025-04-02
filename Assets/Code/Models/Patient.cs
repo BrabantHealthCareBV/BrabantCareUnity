@@ -4,6 +4,7 @@ using System;
 public class Patient
 {
     public string ID;
+    public string UserID;
     public string FirstName;
     public string LastName;
     public DateTime BirthDate;

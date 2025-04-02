@@ -17,6 +17,11 @@ public class GuardianApiClient : MonoBehaviour
         string data = JsonUtility.ToJson(guardian);
         return await webClient.SendPostRequest(Route, data);
     }
+    public async Awaitable<IWebRequestReponse> Update(Guardian guardian)
+    {
+        string data = JsonUtility.ToJson(guardian);
+        return await webClient.SendPutRequest(Route, data);
+    }
 
     public async Awaitable<IWebRequestReponse> Delete(Guid id)
     {

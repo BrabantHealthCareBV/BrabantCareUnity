@@ -146,7 +146,7 @@ public class AccountScreenLogic : MonoBehaviour
             KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
         }
 
-        //updateUI();
+        updateUI();
     }
 
     public void registerButtonClick()
@@ -177,6 +177,7 @@ public class AccountScreenLogic : MonoBehaviour
         if (currentState == AccountState.Edit)
         {
             saveData(PatientFields, GuardianFields);
+            brabantApp.postData();
         }
     }
 
