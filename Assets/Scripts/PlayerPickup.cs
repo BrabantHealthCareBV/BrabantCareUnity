@@ -7,7 +7,7 @@ public class PlayerPickup : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("ItemPickup"))
+        if (other.CompareTag("ItemPickup") && itemCount != 48)
         {
             itemCount++;
             Debug.Log("Item picked up: " + other.name);
