@@ -52,7 +52,7 @@ public class AccountScreenLogic : MonoBehaviour
 
     void OnEnable()
     {
-        StartCoroutine(WaitForKeepAliveAndUpdateUI());
+        //StartCoroutine(WaitForKeepAliveAndUpdateUI());
         //updateUI();
     }
     private IEnumerator WaitForKeepAliveAndUpdateUI()
@@ -70,7 +70,7 @@ public class AccountScreenLogic : MonoBehaviour
         PopulatePatientDropdown();
         PopulateGuardianDropdown();
 
-        updateUI();  // Set UI with the first patient/guardian by default
+        //updateUI();  // Set UI with the first patient/guardian by default
     }
 
     private void PopulatePatientDropdown()
@@ -111,7 +111,7 @@ public class AccountScreenLogic : MonoBehaviour
 {
     if (index < KeepAlive.Instance.StoredPatients.Count)
     {
-        KeepAlive.Instance.SelectedPatient = KeepAlive.Instance.StoredPatients[index];
+        KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index];
         updateUI();
     }
 }
@@ -120,7 +120,7 @@ private void OnGuardianSelected(int index)
 {
     if (index < KeepAlive.Instance.StoredGuardians.Count)
     {
-        KeepAlive.Instance.SelectedGuardian = KeepAlive.Instance.StoredGuardians[index];
+        KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index];
         updateUI();
     }
 }

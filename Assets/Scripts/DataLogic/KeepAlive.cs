@@ -13,8 +13,8 @@ public class KeepAlive : MonoBehaviour
     //public Doctor[] StoredDoctors { get; set; }
     public List<Patient> StoredPatients { get; private set; } = new List<Patient>();
     public List<Guardian> StoredGuardians { get; private set; } = new List<Guardian>();
-    public Patient SelectedPatient { get; set; }
-    public Guardian SelectedGuardian { get; set; }
+    //public Patient SelectedPatient { get; set; } = new();
+    //public Guardian SelectedGuardian { get; set; } = new();
     private string _userToken = "";
     public string UserToken
     {
