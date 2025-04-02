@@ -4,7 +4,7 @@ using UnityEngine;
 public class MeldingenManager : MonoBehaviour
 {
     public GameObject popUp;
-    private float tijdTotMelding = 5f; //Seconden
+    private float tijdTotMelding = 500f; //Seconden
     public GameObject notificationTrigger;
 
     void Start()
