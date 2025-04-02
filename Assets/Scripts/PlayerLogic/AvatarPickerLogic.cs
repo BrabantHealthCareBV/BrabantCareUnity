@@ -3,6 +3,8 @@ using UnityEngine.UI;
 public class AvaterPickLogic : MonoBehaviour
 {
     public Button Red, Blue, Green;
+    public GameObject PlayerGreen, PlayerBlue, PlayerRed;
+    public GameObject AvatarPicker;
 
     public void OnHoverEnter(Button button)
     {
@@ -12,5 +14,23 @@ public class AvaterPickLogic : MonoBehaviour
     public void OnHoverExit(Button button)
     {
         button.transform.localScale = Vector3.one;
+    }
+
+
+    public void SelectGreen()
+    {
+        PlayerGreen.SetActive(true);
+        AvatarPicker.SetActive(false);
+    }
+
+    public void SelectBlue()
+    {
+        PlayerBlue.SetActive(true);
+        AvatarPicker.SetActive(false);
+    }
+    public void SelectRed()
+    {
+        PlayerRed.SetActive(true);
+        AvatarPicker.SetActive(false);
     }
 }

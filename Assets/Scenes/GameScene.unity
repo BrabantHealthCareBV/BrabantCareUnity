@@ -491,7 +491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &33142214
 Transform:
   m_ObjectHideFlags: 0
@@ -501,8 +501,8 @@ Transform:
   m_GameObject: {fileID: 33142213}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -482.85, y: -573.08, z: 7.689459}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalPosition: {x: -482.85, y: -573.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 106577074}
@@ -2149,7 +2149,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &101016644
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3377,8 +3377,8 @@ Transform:
   m_GameObject: {fileID: 160968619}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -482.85, y: -573.08, z: 7.689459}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalPosition: {x: -482.85, y: -573.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 99894800}
@@ -14654,7 +14654,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 217686178}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1708454361}
+        m_TargetAssemblyTypeName: AvaterPickLogic, Assembly-CSharp
+        m_MethodName: SelectGreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &217686178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22456,7 +22468,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 616757797}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1708454361}
+        m_TargetAssemblyTypeName: AvaterPickLogic, Assembly-CSharp
+        m_MethodName: SelectRed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &616757797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23635,8 +23659,8 @@ Transform:
   m_GameObject: {fileID: 661896584}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.98617554, y: 0.7923889, z: 0}
-  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1874561981}
@@ -27694,7 +27718,7 @@ Transform:
   m_GameObject: {fileID: 894087932}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7889404, y: -0.63391113, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35408,7 +35432,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1286394260}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1708454361}
+        m_TargetAssemblyTypeName: AvaterPickLogic, Assembly-CSharp
+        m_MethodName: SelectBlue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1286394260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35788,7 +35824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1297628059
 RectTransform:
   m_ObjectHideFlags: 0
@@ -75953,6 +75989,10 @@ MonoBehaviour:
   Red: {fileID: 616757796}
   Blue: {fileID: 1286394259}
   Green: {fileID: 217686177}
+  PlayerGreen: {fileID: 1874561980}
+  PlayerBlue: {fileID: 33142213}
+  PlayerRed: {fileID: 160968619}
+  AvatarPicker: {fileID: 1708454359}
 --- !u!1 &1718686531
 GameObject:
   m_ObjectHideFlags: 0
@@ -76761,7 +76801,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1788488171
 Transform:
   m_ObjectHideFlags: 0
@@ -76771,7 +76811,7 @@ Transform:
   m_GameObject: {fileID: 1788488170}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 482.06107, y: 572.4461, z: -7.689459}
+  m_LocalPosition: {x: 482.06107, y: 572.4461, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -78415,7 +78455,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1874561981
 Transform:
   m_ObjectHideFlags: 0
@@ -78425,8 +78465,8 @@ Transform:
   m_GameObject: {fileID: 1874561980}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -482.85, y: -573.08, z: 7.689459}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalPosition: {x: -482.85, y: -573.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 661896587}
@@ -85595,7 +85635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2047976560
 RectTransform:
   m_ObjectHideFlags: 0
