@@ -4,11 +4,20 @@ using UnityEngine;
 public class MeldingenManager : MonoBehaviour
 {
     public GameObject popUp;
-    public float tijdTotMelding = 5f; //Seconden
+    private float tijdTotMelding = 5f; //Seconden
+    public GameObject notificationTrigger;
 
     void Start()
     {
         StartCoroutine(WachtOpMelding());
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            notificationTrigger.SetActive(true);
+        }
     }
 
     IEnumerator WachtOpMelding()
