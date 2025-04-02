@@ -20,17 +20,23 @@ public class AvaterPickLogic : MonoBehaviour
     public void SelectGreen()
     {
         PlayerGreen.SetActive(true);
+        PlayerBlue.SetActive(false);
+        PlayerRed.SetActive(false);
         AvatarPicker.SetActive(false);
     }
 
     public void SelectBlue()
     {
         PlayerBlue.SetActive(true);
+        PlayerGreen.SetActive(false);
+        PlayerRed.SetActive(false);
         AvatarPicker.SetActive(false);
     }
     public void SelectRed()
     {
         PlayerRed.SetActive(true);
+        PlayerGreen.SetActive(false);
+        PlayerBlue.SetActive(false);
         AvatarPicker.SetActive(false);
     }
 }

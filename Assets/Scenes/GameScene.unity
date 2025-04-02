@@ -491,7 +491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &33142214
 Transform:
   m_ObjectHideFlags: 0
@@ -798,7 +798,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &35875969
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3367,7 +3367,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &160968620
 Transform:
   m_ObjectHideFlags: 0
@@ -15502,7 +15502,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &271861636
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17652,7 +17652,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &383739814
 Transform:
   m_ObjectHideFlags: 0
@@ -19818,7 +19818,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &567675752
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -24015,7 +24015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &671253323
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -24857,7 +24857,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &733093116
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -26234,7 +26234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &792211910
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -27688,7 +27688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &894087933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27718,7 +27718,7 @@ Transform:
   m_GameObject: {fileID: 894087932}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.7889404, y: -0.63391113, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28435,7 +28435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &940826200
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -30654,7 +30654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1026546633
 Transform:
   m_ObjectHideFlags: 0
@@ -31313,7 +31313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1051594053
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -31777,7 +31777,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1078372701
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -32663,7 +32663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1102788852
 Transform:
   m_ObjectHideFlags: 0
@@ -74853,7 +74853,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1636368199
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -75956,7 +75956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1708454360
 Transform:
   m_ObjectHideFlags: 0
@@ -76013,7 +76013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1718686532
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -78449,6 +78449,7 @@ GameObject:
   - component: {fileID: 1874561983}
   - component: {fileID: 1874561982}
   - component: {fileID: 1874561988}
+  - component: {fileID: 1874561989}
   m_Layer: 0
   m_Name: PlayerGreen
   m_TagString: Player
@@ -78742,6 +78743,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemCounterText: {fileID: 616557563}
+--- !u!114 &1874561989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1874561980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e2c0d55e3f369746a1e26e5fdc4b3d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1874561981}
 --- !u!1 &1875666217
 GameObject:
   m_ObjectHideFlags: 0
@@ -80410,7 +80424,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!61 &1951263391
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -85264,7 +85278,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &2012814976
 SpriteRenderer:
   m_ObjectHideFlags: 0
