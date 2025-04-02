@@ -4,7 +4,7 @@ using UnityEngine;
 public class RouteGameType : MonoBehaviour
 {
     public string route;
-    private string routeChoice = "routeA";
+    private string routeChoice = "routeB";
     public GameObject doorclosed;
     public GameObject doorOpen;
     public GameObject GreyAreaA;
