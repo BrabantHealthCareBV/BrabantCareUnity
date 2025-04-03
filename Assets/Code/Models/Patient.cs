@@ -12,6 +12,8 @@ public class Patient
     public string GuardianID;
     public string TreatmentPlanID;
     public string DoctorID;
+    public int GameState;
+    public int Score;
 
     public Patient()
     {

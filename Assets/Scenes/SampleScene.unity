@@ -2756,8 +2756,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5b6644eb56049e4ab61f22034a614db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patientDropdown: {fileID: 0}
-  guardianDropdown: {fileID: 0}
+  patientDropdown: {fileID: 608352905}
+  guardianDropdown: {fileID: 1434287047}
   registerInfo: Vul uw informatie in om te registreren
   loginInfo: Vul uw Login informatie in
   editInfo: Pas Uw gegevens aan
@@ -9461,6 +9461,7 @@ MonoBehaviour:
     password: 
   guardian:
     ID: 
+    UserID: 
     FirstName: 
     LastName: 
   patient:
@@ -9471,6 +9472,8 @@ MonoBehaviour:
     GuardianID: 
     TreatmentPlanID: 
     DoctorID: 
+    GameState: 0
+    Score: 0
   userApiClient: {fileID: 2001857668}
   patientApiClient: {fileID: 2001857671}
   guardianApiClient: {fileID: 2001857672}
@@ -10866,6 +10869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 823a470604260e749a3f2764139fd69b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _userToken: 
 --- !u!4 &1567814708
 Transform:
   m_ObjectHideFlags: 0

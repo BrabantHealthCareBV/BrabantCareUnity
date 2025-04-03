@@ -5,17 +5,12 @@ using System.Collections.Generic;
 public class Guardian
 {
     public string ID;
+    public string UserID;
     public string FirstName;
     public string LastName;
-    
+
     public Guardian()
     {
 
-    }
-
-    public Guardian(string FirstName, string LastName)
-    {
-        this.FirstName = FirstName;
-        this.LastName = LastName;
     }
 }

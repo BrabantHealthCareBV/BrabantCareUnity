@@ -52,8 +52,13 @@ public class AccountScreenLogic : MonoBehaviour
 
     void OnEnable()
     {
-        //StartCoroutine(WaitForKeepAliveAndUpdateUI());
+        Debug.Log("enabled account screen");
+        StartCoroutine(WaitForKeepAliveAndUpdateUI());
         //updateUI();
+    }
+    private void OnDisable()
+    {
+        Debug.Log("dissabeld account screen");
     }
     private IEnumerator WaitForKeepAliveAndUpdateUI()
     {
@@ -67,10 +72,7 @@ public class AccountScreenLogic : MonoBehaviour
 
         brabantApp.FetchUserData();  // Fetch and populate data
 
-        PopulatePatientDropdown();
-        PopulateGuardianDropdown();
-
-        //updateUI();  // Set UI with the first patient/guardian by default
+        updateUI();  // Set UI with the first patient/guardian by default
     }
 
     private void PopulatePatientDropdown()
@@ -87,7 +89,7 @@ public class AccountScreenLogic : MonoBehaviour
         patientDropdown.onValueChanged.AddListener(OnPatientSelected);
 
         if (options.Count > 0)
-            patientDropdown.value = 0; // Select first patient by default
+            patientDropdown.value = 0;
     }
 
     private void PopulateGuardianDropdown()
@@ -104,32 +106,32 @@ public class AccountScreenLogic : MonoBehaviour
         guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
 
         if (options.Count > 0)
-            guardianDropdown.value = 0; // Select first guardian by default
+            guardianDropdown.value = 0;
     }
 
     private void OnPatientSelected(int index)
-{
-    if (index < KeepAlive.Instance.StoredPatients.Count)
     {
-        KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index];
-        updateUI();
+        if (index < KeepAlive.Instance.StoredPatients.Count)
+        {
+            KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index];
+            updateUI();
+        }
     }
-}
 
-private void OnGuardianSelected(int index)
-{
-    if (index < KeepAlive.Instance.StoredGuardians.Count)
+    private void OnGuardianSelected(int index)
     {
-        KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index];
-        updateUI();
+        if (index < KeepAlive.Instance.StoredGuardians.Count)
+        {
+            KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index];
+            updateUI();
+        }
     }
-}
 
 
     #region statesetters
     public void setRegisterState()
     {
-        currentState = AccountState.Register; // UpdateGuardian the state
+        currentState = AccountState.Register;
         PatientRegion.SetActive(true);
         GuardianRegion.SetActive(true);
         AccountLoginRegion.SetActive(true);
@@ -140,7 +142,7 @@ private void OnGuardianSelected(int index)
 
     public void setLoginState()
     {
-        currentState = AccountState.Login; // UpdateGuardian the state
+        currentState = AccountState.Login;
         PatientRegion.SetActive(false);
         GuardianRegion.SetActive(false);
         AccountLoginRegion.SetActive(true);
@@ -151,7 +153,7 @@ private void OnGuardianSelected(int index)
 
     public void setEditState()
     {
-        currentState = AccountState.Edit; // UpdateGuardian the state
+        currentState = AccountState.Edit;
         PatientRegion.SetActive(true);
         GuardianRegion.SetActive(true);
         AccountLoginRegion.SetActive(false);
@@ -170,20 +172,25 @@ private void OnGuardianSelected(int index)
                 : new Vector3(1, 1, 1);
         }
     }
-#endregion
+    #endregion
     public void updateUI()
     {
-        if (PatientFields != null && PatientFields.Length >= 2)
+        Debug.Log("Updating accountscreen ui");
+        if (PatientFields != null && PatientFields.Length >= 2 && KeepAlive.Instance.StoredPatient != null)
         {
             PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;
             PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;
         }
 
-        if (GuardianFields != null && GuardianFields.Length >= 2)
+        if (GuardianFields != null && GuardianFields.Length >= 2&& KeepAlive.Instance.StoredGuardian != null)
         {
             GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;
             GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;
         }
+
+        PopulatePatientDropdown();
+        PopulateGuardianDropdown();
+
         brabantApp.updateUI();
 
         if (KeepAlive.Instance.UserToken == "" || KeepAlive.Instance.UserToken == null)
@@ -229,6 +236,8 @@ private void OnGuardianSelected(int index)
         {
             setRegisterState();
         }
+        WaitForKeepAliveAndUpdateUI();
+
     }
     public void loginButtonClick()
     {
@@ -240,6 +249,7 @@ private void OnGuardianSelected(int index)
         {
             setLoginState();
         }
+        WaitForKeepAliveAndUpdateUI();
     }
     public void saveButtonClick()
     {
@@ -249,7 +259,7 @@ private void OnGuardianSelected(int index)
             brabantApp.postData();
         }
     }
-#endregion
+    #endregion
 
     #region helpermethods
 

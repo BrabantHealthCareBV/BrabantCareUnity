@@ -97,102 +97,36 @@ public class BrabantApp : MonoBehaviour
 
         // Fetch patient data
         IWebRequestReponse patientResponse = await patientApiClient.GetAll();
-        if (patientResponse is WebRequestData<List<Patient>> patientData && patientData.Data != null)
-        {
-            // Filter for the correct patient (adjust this based on your API structure)
-            //KeepAlive.Instance.StoredPatient = patientData.Data.FirstOrDefault(p => p.UserID == KeepAlive.Instance.StoredPatient.UserID);
+        //patientResponse = ParsePatientResponse(patientResponse);  // Parse the response
 
-            if (KeepAlive.Instance.StoredPatient != null)
-            {
-                Debug.Log("Fetched existing patient data.");
-            }
-            else
-            {
-                KeepAlive.Instance.StoredPatient = new Patient();
-                Debug.Log("No matching patient found. Created new empty patient.");
-            }
-        }
-        else if (patientResponse is WebRequestError patientError)
+        switch (patientResponse)
         {
-            Debug.LogError($"Error fetching patient data: {patientError.ErrorMessage}");
+            case WebRequestData<List<Patient>> dataResponse:
+                List<Patient> patients = dataResponse.Data;
+                Debug.Log("List of Patients: ");
+                patients.ForEach(patient => Debug.Log(patient.ID));
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Read patients error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + patientResponse.GetType());
         }
 
-        // Fetch guardian data
-        IWebRequestReponse guardianResponse = await guardianApiClient.GetAllGuardian();
-        if (guardianResponse is WebRequestData<List<Guardian>> guardianData && guardianData.Data != null)
-        {
-            // Filter for the correct guardian
-            KeepAlive.Instance.StoredGuardian = guardianData.Data.FirstOrDefault(g => g.ID == KeepAlive.Instance.StoredPatient.GuardianID);
-
-            if (KeepAlive.Instance.StoredGuardian != null)
-            {
-                Debug.Log("Fetched existing guardian data.");
-            }
-            else
-            {
-                KeepAlive.Instance.StoredGuardian = new Guardian();
-                Debug.Log("No matching guardian found. Created new empty guardian.");
-            }
-        }
-        else if (guardianResponse is WebRequestError guardianError)
-        {
-            Debug.LogError($"Error fetching guardian data: {guardianError.ErrorMessage}");
-        }
-
-        // UpdateGuardian UI after fetching data
+        // Update UI after fetching data
         updateUI();
     }
 
+    
 
-    private void HandleApiResponse(IWebRequestReponse response, string action)
-    {
-        switch (response)
-        {
-            case WebRequestData<object> successResponse:
-                Debug.Log($"{action} success.");
-                break;
-            case WebRequestError errorResponse:
-                Debug.LogError($"{action} error: {errorResponse.ErrorMessage}");
-                break;
-            default:
-                throw new NotImplementedException($"No implementation for response type: {response.GetType()}");
-        }
-    }
+    
 
-    public async void SaveData()
-    {
-        if (string.IsNullOrEmpty(KeepAlive.Instance.UserToken))
-        {
-            Debug.Log("User is not logged in. Cannot save data.");
-            return;
-        }
 
-        Debug.Log("Saving user data...");
 
-        // Check if patient already exists, if so, update instead of create
-        if (KeepAlive.Instance.StoredPatient.ID != "")
-        {
-            var patientResponse = await patientApiClient.UpdatePatient(KeepAlive.Instance.StoredPatient);
-            HandleApiResponse(patientResponse, "UpdateGuardian patient");
-        }
-        else
-        {
-            var patientResponse = await patientApiClient.CreatePatient(KeepAlive.Instance.StoredPatient);
-            HandleApiResponse(patientResponse, "CreateGuardian patient");
-        }
 
-        // Check if guardian already exists, if so, update instead of create
-        if (KeepAlive.Instance.StoredGuardian.ID != "")
-        {
-            var guardianResponse = await guardianApiClient.UpdateGuardian(KeepAlive.Instance.StoredGuardian);
-            HandleApiResponse(guardianResponse, "UpdateGuardian guardian");
-        }
-        else
-        {
-            var guardianResponse = await guardianApiClient.CreateGuardian(KeepAlive.Instance.StoredGuardian);
-            HandleApiResponse(guardianResponse, "CreateGuardian guardian");
-        }
-    }
+
 
     public void updateUI()
     {
