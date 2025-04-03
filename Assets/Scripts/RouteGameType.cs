@@ -9,7 +9,27 @@ public class RouteGameType : MonoBehaviour
     public GameObject doorOpen;
     public GameObject GreyAreaA;
     public GameObject GreyAreaB;
-    
+
+    public void ChangeRoute()
+    {
+        Debug.Log("Buttonwerkt");
+        if (routeChoice == "routeB")
+        {
+            Debug.Log("codewerktB");
+            routeChoice = "routeA";
+            GreyAreaActivation();
+        }
+        else if (routeChoice == "routeB")
+        {
+            Debug.Log("codewerktvoorA");
+            routeChoice = "routeA";
+            GreyAreaActivation();
+        }
+    }
+
+
+
+
     public void GreyAreaActivation()
     { 
         if (routeChoice == "routeA")
