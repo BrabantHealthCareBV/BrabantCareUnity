@@ -8,7 +8,7 @@ public class Patient
     public string firstName;
     public string lastName;
     public DateTime birthDate;
-    public DateTime nextAppointmentDate;
+    public DateTime? nextAppointmentDate;
     public string guardianID;
     public string treatmentPlanID;
     public string doctorID;

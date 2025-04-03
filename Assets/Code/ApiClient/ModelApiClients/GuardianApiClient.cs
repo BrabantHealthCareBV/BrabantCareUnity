@@ -44,4 +44,11 @@ public class GuardianApiClient : MonoBehaviour
                 return webRequestResponse;
         }
     }
+
+    public async Task<IWebRequestReponse> GetById(string id)
+    {
+        string route = $"{Route}/{id}";
+        IWebRequestReponse webRequestResponse = await webClient.SendGetRequest(Route);
+        return ParseGuardianResponse(webRequestResponse);
+    }
 }

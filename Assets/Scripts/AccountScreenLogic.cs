@@ -212,32 +212,12 @@ public class AccountScreenLogic : MonoBehaviour
         Debug.Log($"Current State: {currentState}");
     }
 
-    public void saveData(TMP_InputField[] patientFields, TMP_InputField[] guardianFields)
-    {
-
-        // UpdateGuardian Patient fields (name and surname)
-        if (patientFields[0] != null && patientFields.Length >= 2)
-        {
-            KeepAlive.Instance.StoredPatient.firstName = patientFields[0].text;
-            KeepAlive.Instance.StoredPatient.lastName = patientFields[1].text;
-        }
-
-        if (guardianFields[0] != null && guardianFields.Length >= 2)
-        {
-            KeepAlive.Instance.StoredGuardian.firstName = guardianFields[0].text;
-            KeepAlive.Instance.StoredGuardian.lastName = guardianFields[1].text;
-        }
-
-        updateUI();
-    }
-
 
     #region buttons
     public void registerButtonClick()
     {
         if (currentState == AccountState.Register)
         {
-            saveData(PatientFields, GuardianFields);
             brabantApp.Register();
         }
         else
@@ -259,13 +239,29 @@ public class AccountScreenLogic : MonoBehaviour
         }
         WaitForKeepAliveAndUpdateUI();
     }
-    public void saveButtonClick()
+    public void patientSaveButtonClick()
     {
-        if (currentState == AccountState.Edit)
+
+        if (PatientFields[0] != null && PatientFields.Length >= 2)
         {
-            saveData(PatientFields, GuardianFields);
-            brabantApp.postData();
+            KeepAlive.Instance.StoredPatient.firstName = PatientFields[0].text;
+            KeepAlive.Instance.StoredPatient.lastName = PatientFields[1].text;
         }
+        brabantApp.savetoApiPatient();
+        updateUI();
+
+    }
+    public void guardianSaveButtonClick()
+    {
+
+        if (PatientFields[0] != null && PatientFields.Length >= 2)
+        {
+            KeepAlive.Instance.StoredGuardian.firstName = GuardianFields[0].text;
+            KeepAlive.Instance.StoredGuardian.lastName = GuardianFields[1].text;
+        }
+        brabantApp.savetoApiGuardian();
+        updateUI();
+
     }
     #endregion
 
@@ -339,27 +335,42 @@ public class AccountScreenLogic : MonoBehaviour
     {
         if (PatientFields != null && PatientFields.Length >= 2)
         {
+            PatientFields[0].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
             PatientFields[0].onEndEdit.AddListener(delegate { OnPatientDataChanged(); });
+
+            PatientFields[1].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
             PatientFields[1].onEndEdit.AddListener(delegate { OnPatientDataChanged(); });
         }
 
         if (GuardianFields != null && GuardianFields.Length >= 2)
         {
+            GuardianFields[0].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
             GuardianFields[0].onEndEdit.AddListener(delegate { OnGuardianDataChanged(); });
+
+            GuardianFields[1].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
             GuardianFields[1].onEndEdit.AddListener(delegate { OnGuardianDataChanged(); });
         }
     }
 
 
+
     private void OnPatientDataChanged()
     {
-        saveData(PatientFields, GuardianFields);
+        if (PatientFields[0] != null && PatientFields.Length >= 2)
+        {
+            KeepAlive.Instance.StoredPatient.firstName = PatientFields[0].text;
+            KeepAlive.Instance.StoredPatient.lastName = PatientFields[1].text;
+        }
         Debug.Log("Patient data updated in KeepAlive.");
     }
 
     private void OnGuardianDataChanged()
     {
-        saveData(PatientFields, GuardianFields);
+        if (PatientFields[0] != null && PatientFields.Length >= 2)
+        {
+            KeepAlive.Instance.StoredGuardian.firstName = GuardianFields[0].text;
+            KeepAlive.Instance.StoredGuardian.lastName = GuardianFields[1].text;
+        }
         Debug.Log("Guardian data updated in KeepAlive.");
     }
     #endregion

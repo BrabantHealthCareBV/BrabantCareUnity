@@ -46,44 +46,87 @@ public class BrabantApp : MonoBehaviour
 
 
 
-
-    public async void postData()
+    public async void savetoApiGuardian()
     {
         if (KeepAlive.Instance.UserToken != "")
         {
-            IWebRequestReponse webRequestResponse = await patientApiClient.CreatePatient(KeepAlive.Instance.StoredPatient);
+            // Check if the guardian exists
+            IWebRequestReponse existingResponse = await guardianApiClient.GetById(KeepAlive.Instance.StoredGuardian.id);
 
-            switch (webRequestResponse)
+            if (existingResponse is WebRequestData<Guardian>)
             {
-                case WebRequestData<Patient> dataResponse:
-                    // TODO: Handle succes scenario.
-                    break;
-                case WebRequestError errorResponse:
-                    string errorMessage = errorResponse.ErrorMessage;
-                    Debug.Log("CreateGuardian patient error: " + errorMessage);
-                    // TODO: Handle error scenario. Show the errormessage to the user.
-                    break;
-                default:
-                    throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+                Debug.Log("Guardian exists, updating...");
+                IWebRequestReponse updateResponse = await guardianApiClient.UpdateGuardian(KeepAlive.Instance.StoredGuardian);
+
+                switch (updateResponse)
+                {
+                    case WebRequestData<Guardian>:
+                        Debug.Log("Guardian updated successfully.");
+                        break;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Update guardian error: " + errorResponse.ErrorMessage);
+                        break;
+                }
             }
-
-            webRequestResponse = await guardianApiClient.CreateGuardian(KeepAlive.Instance.StoredGuardian);
-
-            switch (webRequestResponse)
+            else
             {
-                case WebRequestData<Guardian> dataResponse:
-                    // TODO: Handle succes scenario.
-                    break;
-                case WebRequestError errorResponse:
-                    string errorMessage = errorResponse.ErrorMessage;
-                    Debug.Log("CreateGuardian guardian error: " + errorMessage);
-                    // TODO: Handle error scenario. Show the errormessage to the user.
-                    break;
-                default:
-                    throw new NotImplementedException("No implementation for webRequestResponse of class: " + webRequestResponse.GetType());
+                Debug.Log("Guardian does not exist, creating...");
+                IWebRequestReponse createResponse = await guardianApiClient.CreateGuardian(KeepAlive.Instance.StoredGuardian);
+
+                switch (createResponse)
+                {
+                    case WebRequestData<Guardian>:
+                        Debug.Log("Guardian created successfully.");
+                        break;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Create guardian error: " + errorResponse.ErrorMessage);
+                        break;
+                }
             }
         }
     }
+
+
+    public async void savetoApiPatient()
+    {
+        if (KeepAlive.Instance.UserToken != "")
+        {
+            // Check if the patient exists
+            IWebRequestReponse existingResponse = await patientApiClient.GetById(KeepAlive.Instance.StoredPatient.id);
+
+            if (existingResponse is WebRequestData<Patient>)
+            {
+                Debug.Log("Patient exists, updating...");
+                IWebRequestReponse updateResponse = await patientApiClient.UpdatePatient(KeepAlive.Instance.StoredPatient);
+
+                switch (updateResponse)
+                {
+                    case WebRequestData<Patient>:
+                        Debug.Log("Patient updated successfully.");
+                        break;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Update patient error: " + errorResponse.ErrorMessage);
+                        break;
+                }
+            }
+            else
+            {
+                Debug.Log($"Patient does not exist, creating... {existingResponse.GetType()}");
+                IWebRequestReponse createResponse = await patientApiClient.CreatePatient(KeepAlive.Instance.StoredPatient);
+
+                switch (createResponse)
+                {
+                    case WebRequestData<Patient>:
+                        Debug.Log("Patient created successfully.");
+                        break;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Create patient error: " + errorResponse.ErrorMessage);
+                        break;
+                }
+            }
+        }
+    }
+
 
     public async void FetchUserData()
     {
@@ -119,15 +162,6 @@ public class BrabantApp : MonoBehaviour
         // Update UI after fetching data
         updateUI();
     }
-
-    
-
-    
-
-
-
-
-
 
     public void updateUI()
     {

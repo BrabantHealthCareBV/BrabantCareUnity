@@ -16,13 +16,18 @@ public class PatientApiClient : MonoBehaviour
 
     public async Awaitable<IWebRequestReponse> CreatePatient(Patient patient)
     {
+        if (patient.doctorID == "")
+            patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
         return await webClient.SendPostRequest(Route, data);
     }
     public async Awaitable<IWebRequestReponse> UpdatePatient(Patient patient)
     {
+        if (patient.doctorID == "")
+            patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
-        return await webClient.SendPutRequest(Route, data);
+        string route = $"{Route}/{patient.id}";
+        return await webClient.SendPutRequest(route, data);
     }
 
     public async Awaitable<IWebRequestReponse> DeletePatient(string id)
@@ -43,4 +48,32 @@ public class PatientApiClient : MonoBehaviour
                 return webRequestResponse;
         }
     }
+
+    public async Task<IWebRequestReponse> GetById(string id)
+    {
+        string route = $"{Route}/{id}";
+        IWebRequestReponse webRequestResponse = await webClient.SendGetRequest(route);
+
+        switch (webRequestResponse)
+        {
+            case WebRequestData<string> data:
+                Debug.Log("Patient Response data raw: " + data.Data);
+
+                try
+                {
+                    // Deserialize JSON as a single Patient object
+                    Patient patient = JsonUtility.FromJson<Patient>(data.Data);
+                    return new WebRequestData<Patient>(patient);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError("Failed to parse patient response: " + ex.Message);
+                    return new WebRequestError("Invalid patient data format");
+                }
+
+            default:
+                return webRequestResponse;
+        }
+    }
+
 }
