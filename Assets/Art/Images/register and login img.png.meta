@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5ece452f8d94e1b4d95329fcf1f8fb92
+guid: 8d8227b9b2a5d0a4aaa068acd53f2e30
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1000159267095990879
-    second: tijdlijncartoon_0
+      213: -8955847317706793025
+    second: register and login img_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tijdlijncartoon_0
+      name: register and login img_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f52521aed8741ed00800000000000000
-      internalID: 1000159267095990879
+      spriteID: fbf937d805076b380800000000000000
+      internalID: -8955847317706793025
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tijdlijncartoon_0: 1000159267095990879
+      register and login img_0: -8955847317706793025
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
