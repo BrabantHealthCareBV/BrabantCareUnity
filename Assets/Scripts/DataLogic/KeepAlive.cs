@@ -10,6 +10,8 @@ public class KeepAlive : MonoBehaviour
     public string UserToken { get; set; }
 
     public Vector3 StoredSpawnPosition { get; set; }
+
+    public string SelectedAvatar { get; set; } = "Green";
     void Awake()
     {
         if (Instance != null && Instance != this)
