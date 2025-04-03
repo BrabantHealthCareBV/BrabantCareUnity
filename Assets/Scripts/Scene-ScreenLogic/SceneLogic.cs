@@ -33,11 +33,7 @@ public class SceneLogic : MonoBehaviour
 
     public void LoadHomeScreen()
     {
-        // Eerst de SampleScene laden
         SceneManager.LoadScene("SampleScene");
-
-        // Zorg ervoor dat het HomeScreen getoond wordt als het script de juiste schermlogica aanroept
-        FindObjectOfType<ScreenLogic>().ShowHomeScreen();
     }
 
     public void LoadGameAtRontgen()
