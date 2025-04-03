@@ -1,59 +1,48 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SpawnLogic : MonoBehaviour
 {
-    public Transform player;  // Sleep hier de speler in via de Inspector
+    public GameObject PlayerGreen, PlayerBlue, PlayerRed;
 
     void Start()
     {
-        // Controleer of KeepAlive instance bestaat en haal de spawnpositie op
         if (KeepAlive.Instance != null)
         {
             Vector3 spawnPos = KeepAlive.Instance.StoredSpawnPosition;
-            Debug.Log("Spawnpositie opgehaald: " + spawnPos);
+            string avatar = KeepAlive.Instance.SelectedAvatar;
 
-            // Controleer of de speler een parent heeft
-            if (player.parent != null)
+            Debug.Log("Gekozen avatar: " + avatar);
+            Debug.Log("Speler spawnt op: " + spawnPos);
+
+            PlayerGreen.SetActive(false);
+            PlayerBlue.SetActive(false);
+            PlayerRed.SetActive(false);
+
+            if (avatar == "Green")
             {
-                Debug.Log("Speler heeft een parent: " + player.parent.name);
-                // Gebruik de wereldpositie in plaats van localPosition
-                player.position = spawnPos;  // Plaats de speler op de wereldpositie
+                PlayerGreen.SetActive(true);
+                PlayerGreen.transform.position = spawnPos;
+            }
+            else if (avatar == "Blue")
+            {
+                PlayerBlue.SetActive(true);
+                PlayerBlue.transform.position = spawnPos;
+            }
+            else if (avatar == "Red")
+            {
+                PlayerRed.SetActive(true);
+                PlayerRed.transform.position = spawnPos;
             }
             else
             {
-                player.position = spawnPos;  // Plaats de speler in de wereldpositie
+                Debug.LogError("⚠️ Geen geldige avatar gevonden, standaard Green gebruiken.");
+                PlayerGreen.SetActive(true);
+                PlayerGreen.transform.position = spawnPos;
             }
-
-            Debug.Log("Speler final position: " + player.position);  // Log de uiteindelijke positie
         }
         else
         {
-            Debug.LogError("❌ KeepAlive is niet geïnitialiseerd.");
+            Debug.LogError("❌ KeepAlive.Instance is null!");
         }
-    }
-
-    // Methode om de speler bij de Rontgen te spawnen
-    public void SpawnAtRontgen()
-    {
-        player.position = new Vector3(0, 0, 0);  // Set de positie van de speler
-    }
-
-    // Methode om de speler bij Route A te spawnen
-    public void SpawnAtRouteA()
-    {
-        player.position = new Vector3(-13, 0, 0);  // Set de positie van de speler
-    }
-
-    // Methode om de speler bij Route B te spawnen
-    public void SpawnAtRouteB()
-    {
-        player.position = new Vector3(-13, 8, 0);  // Set de positie van de speler
-    }
-
-    // Methode om de speler bij Huis te spawnen
-    public void SpawnAtHuis()
-    {
-        player.position = new Vector3(13, 4, 0);  // Set de positie van de speler
     }
 }
