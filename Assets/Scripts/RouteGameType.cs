@@ -15,11 +15,21 @@ public class RouteGameType : MonoBehaviour
         Debug.Log("Buttonwerkt");
         if (routeChoice == "routeB")
         {
-            Debug.Log("codewerkt");
+            Debug.Log("codewerktB");
             routeChoice = "routeA";
+            GreyAreaActivation();
+        }
+        else if (routeChoice == "routeB")
+        {
+            Debug.Log("codewerktvoorA");
+            routeChoice = "routeA";
+            GreyAreaActivation();
         }
     }
-    
+
+
+
+
     public void GreyAreaActivation()
     { 
         if (routeChoice == "routeA")

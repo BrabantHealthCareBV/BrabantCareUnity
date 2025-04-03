@@ -23017,8 +23017,8 @@ MonoBehaviour:
   route: 
   doorclosed: {fileID: 0}
   doorOpen: {fileID: 0}
-  GreyAreaA: {fileID: 0}
-  GreyAreaB: {fileID: 0}
+  GreyAreaA: {fileID: 1002150147}
+  GreyAreaB: {fileID: 2127548513}
 --- !u!1 &625972046
 GameObject:
   m_ObjectHideFlags: 0
