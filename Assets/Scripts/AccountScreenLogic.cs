@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -89,7 +90,11 @@ public class AccountScreenLogic : MonoBehaviour
         patientDropdown.onValueChanged.AddListener(OnPatientSelected);
 
         if (options.Count > 0)
+        {
             patientDropdown.value = 0;
+            KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[0];
+        }
+
     }
 
     private void PopulateGuardianDropdown()
@@ -106,7 +111,10 @@ public class AccountScreenLogic : MonoBehaviour
         guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
 
         if (options.Count > 0)
+        {
             guardianDropdown.value = 0;
+            KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[0];
+        }
     }
 
     private void OnPatientSelected(int index)
@@ -176,20 +184,20 @@ public class AccountScreenLogic : MonoBehaviour
     public void updateUI()
     {
         Debug.Log("Updating accountscreen ui");
+
+        PopulatePatientDropdown();
+        PopulateGuardianDropdown();
         if (PatientFields != null && PatientFields.Length >= 2 && KeepAlive.Instance.StoredPatient != null)
         {
             PatientFields[0].text = KeepAlive.Instance.StoredPatient.firstName;
             PatientFields[1].text = KeepAlive.Instance.StoredPatient.lastName;
         }
 
-        if (GuardianFields != null && GuardianFields.Length >= 2&& KeepAlive.Instance.StoredGuardian != null)
+        if (GuardianFields != null && GuardianFields.Length >= 2 && KeepAlive.Instance.StoredGuardian != null)
         {
             GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.firstName;
             GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.lastName;
         }
-
-        PopulatePatientDropdown();
-        PopulateGuardianDropdown();
 
         brabantApp.updateUI();
 

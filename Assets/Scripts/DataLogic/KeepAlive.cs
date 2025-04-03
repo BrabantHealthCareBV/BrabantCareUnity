@@ -4,15 +4,15 @@ using UnityEngine.SceneManagement;
 
 public class KeepAlive : MonoBehaviour
 {
-    public static KeepAlive Instance { get; private set; }
+    public static KeepAlive Instance { get; set; }
 
     // Persistent Data
     //public Doctor StoredDoctor { get; set; }
-    public Guardian StoredGuardian { get; set; }
-    public Patient StoredPatient { get; set; }
+    public Guardian StoredGuardian = new Guardian();
+    public Patient StoredPatient;
     //public Doctor[] StoredDoctors { get; set; }
-    public List<Patient> StoredPatients { get; set; } = new List<Patient>();
-    public List<Guardian> StoredGuardians { get; set; } = new List<Guardian>();
+    public List<Patient> StoredPatients = new List<Patient>();
+    public List<Guardian> StoredGuardians = new List<Guardian>();
     //public Patient SelectedPatient { get; set; } = new();
     //public Guardian SelectedGuardian { get; set; } = new();
     public string _userToken = "";

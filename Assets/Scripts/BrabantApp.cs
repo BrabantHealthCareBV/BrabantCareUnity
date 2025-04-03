@@ -105,6 +105,7 @@ public class BrabantApp : MonoBehaviour
                 List<Patient> patients = dataResponse.Data;
                 Debug.Log("List of Patients: ");
                 patients.ForEach(patient => Debug.Log(patient.id));
+                KeepAlive.Instance.StoredPatients = patients;
                 break;
             case WebRequestError errorResponse:
                 string errorMessage = errorResponse.ErrorMessage;
