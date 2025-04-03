@@ -3,9 +3,9 @@ using System;
 [System.Serializable]
 public class CareMoment
 {
-    public string ID;
-    public string Name;
-    public string Url;
-    public byte[] Image;
-    public int? DurationInMinutes;
+    public string id;
+    public string name;
+    public string url;
+    public byte[] image;
+    public int? durationInMinutes;
 }

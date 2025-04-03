@@ -60,33 +60,33 @@ public static class TreatmentPlanCreator
 
             CareMoment newCareMoment = new CareMoment
             {
-                ID = careMomentID,
-                Name = selectedSteps[i],
-                Url = "",
-                Image = new byte[0],
-                DurationInMinutes = UnityEngine.Random.Range(10, 60)
+                id = careMomentID,
+                name = selectedSteps[i],
+                url = "",
+                image = new byte[0],
+                durationInMinutes = UnityEngine.Random.Range(10, 60)
             };
 
             treatmentPlanCareMoments.Add(new TreatmentPlan_CareMoment
             {
-                TreatmentPlanID = treatmentPlanID,
-                CareMomentID = careMomentID,
-                Order = i + 1
+                treatmentPlanID = treatmentPlanID,
+                careMomentID = careMomentID,
+                order = i + 1
             });
 
-            Debug.Log($"Generated CareMoment: {newCareMoment.Name}, ID: {newCareMoment.ID}");
+            Debug.Log($"Generated CareMoment: {newCareMoment.name}, ID: {newCareMoment.id}");
         }
 
         // Create TreatmentPlan
         TreatmentPlan treatmentPlan = new TreatmentPlan
         {
-            ID = treatmentPlanID,
-            Name = "Gipsbehandeling",
-            PatientIDs = new List<string> { patientID },
-            CareMomentIDs = careMomentIDs
+            id = treatmentPlanID,
+            name = "Gipsbehandeling",
+            patientIDs = new List<string> { patientID },
+            careMomentIDs = careMomentIDs
         };
 
-        Debug.Log($"Generated TreatmentPlan: {treatmentPlan.Name}, Assigned Patient: {patientID}, Doctor: {doctorID}");
+        Debug.Log($"Generated TreatmentPlan: {treatmentPlan.name}, Assigned Patient: {patientID}, Doctor: {doctorID}");
 
         return treatmentPlan;
     }

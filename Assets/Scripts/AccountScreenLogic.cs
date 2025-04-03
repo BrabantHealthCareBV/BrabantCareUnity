@@ -82,7 +82,7 @@ public class AccountScreenLogic : MonoBehaviour
 
         foreach (var patient in KeepAlive.Instance.StoredPatients)
         {
-            options.Add($"{patient.FirstName} {patient.LastName}");
+            options.Add($"{patient.firstName} {patient.lastName}");
         }
 
         patientDropdown.AddOptions(options);
@@ -99,7 +99,7 @@ public class AccountScreenLogic : MonoBehaviour
 
         foreach (var guardian in KeepAlive.Instance.StoredGuardians)
         {
-            options.Add($"{guardian.FirstName} {guardian.LastName}");
+            options.Add($"{guardian.firstName} {guardian.lastName}");
         }
 
         guardianDropdown.AddOptions(options);
@@ -178,14 +178,14 @@ public class AccountScreenLogic : MonoBehaviour
         Debug.Log("Updating accountscreen ui");
         if (PatientFields != null && PatientFields.Length >= 2 && KeepAlive.Instance.StoredPatient != null)
         {
-            PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;
-            PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;
+            PatientFields[0].text = KeepAlive.Instance.StoredPatient.firstName;
+            PatientFields[1].text = KeepAlive.Instance.StoredPatient.lastName;
         }
 
         if (GuardianFields != null && GuardianFields.Length >= 2&& KeepAlive.Instance.StoredGuardian != null)
         {
-            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;
-            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;
+            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.firstName;
+            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.lastName;
         }
 
         PopulatePatientDropdown();
@@ -210,14 +210,14 @@ public class AccountScreenLogic : MonoBehaviour
         // UpdateGuardian Patient fields (name and surname)
         if (patientFields[0] != null && patientFields.Length >= 2)
         {
-            KeepAlive.Instance.StoredPatient.FirstName = patientFields[0].text;
-            KeepAlive.Instance.StoredPatient.LastName = patientFields[1].text;
+            KeepAlive.Instance.StoredPatient.firstName = patientFields[0].text;
+            KeepAlive.Instance.StoredPatient.lastName = patientFields[1].text;
         }
 
         if (guardianFields[0] != null && guardianFields.Length >= 2)
         {
-            KeepAlive.Instance.StoredGuardian.FirstName = guardianFields[0].text;
-            KeepAlive.Instance.StoredGuardian.LastName = guardianFields[1].text;
+            KeepAlive.Instance.StoredGuardian.firstName = guardianFields[0].text;
+            KeepAlive.Instance.StoredGuardian.lastName = guardianFields[1].text;
         }
 
         updateUI();

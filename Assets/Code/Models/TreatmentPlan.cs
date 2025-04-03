@@ -4,9 +4,9 @@ using System.Collections.Generic;
 [System.Serializable]
 public class TreatmentPlan
 {
-    public string ID;
-    public string Name;
-    public List<string> PatientIDs;
-    public List<string> CareMomentIDs;
+    public string id;
+    public string name;
+    public List<string> patientIDs;
+    public List<string> careMomentIDs;
 
 }

@@ -15,10 +15,10 @@ public static class TestdataGenerator
     {
         return new Doctor
         {
-            ID = Convert.ToString(Guid.NewGuid()),
-            Name = doctorNames[UnityEngine.Random.Range(0, doctorNames.Count)],
-            Specialization = specializations[UnityEngine.Random.Range(0, specializations.Count)],
-            PatientIDs = new List<string>()
+            id = Convert.ToString(Guid.NewGuid()),
+            name = doctorNames[UnityEngine.Random.Range(0, doctorNames.Count)],
+            specialization = specializations[UnityEngine.Random.Range(0, specializations.Count)],
+            patientIDs = new List<string>()
         };
     }
 
@@ -26,9 +26,9 @@ public static class TestdataGenerator
     {
         return new Guardian
         {
-            ID = Convert.ToString(Guid.NewGuid()),
-            FirstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
-            LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)]
+            id = Convert.ToString(Guid.NewGuid()),
+            firstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
+            lastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)]
         };
     }
 
@@ -36,12 +36,12 @@ public static class TestdataGenerator
     {
         return new Patient
         {
-            ID = Convert.ToString(Guid.NewGuid()),
-            FirstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
-            LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
-            GuardianID = guardianID,
-            TreatmentPlanID = Convert.ToString(Guid.NewGuid()),
-            DoctorID = doctorID
+            id = Convert.ToString(Guid.NewGuid()),
+            firstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
+            lastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
+            guardianID = guardianID,
+            treatmentPlanID = Convert.ToString(Guid.NewGuid()),
+            doctorID = doctorID
         };
     }
 }

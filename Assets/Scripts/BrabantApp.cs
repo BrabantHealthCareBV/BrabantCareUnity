@@ -104,7 +104,7 @@ public class BrabantApp : MonoBehaviour
             case WebRequestData<List<Patient>> dataResponse:
                 List<Patient> patients = dataResponse.Data;
                 Debug.Log("List of Patients: ");
-                patients.ForEach(patient => Debug.Log(patient.ID));
+                patients.ForEach(patient => Debug.Log(patient.id));
                 break;
             case WebRequestError errorResponse:
                 string errorMessage = errorResponse.ErrorMessage;
@@ -133,7 +133,7 @@ public class BrabantApp : MonoBehaviour
         if (KeepAlive.Instance.StoredPatient == null)
             return;
 
-        string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}\n";
+        string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.firstName} {KeepAlive.Instance.StoredPatient.lastName}\n";
         patientInfo += "Next Appointment: TBD";
 
         if (personalInfo != null)

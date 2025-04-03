@@ -4,10 +4,10 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Guardian
 {
-    public string ID;
-    public string UserID;
-    public string FirstName;
-    public string LastName;
+    public string id;
+    public string userID;
+    public string firstName;
+    public string lastName;
 
     public Guardian()
     {

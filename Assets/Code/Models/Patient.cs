@@ -3,17 +3,17 @@ using System;
 [System.Serializable]
 public class Patient
 {
-    public string ID;
-    public string UserID;
-    public string FirstName;
-    public string LastName;
-    public DateTime BirthDate;
-    public DateTime NextAppointmentDate;
-    public string GuardianID;
-    public string TreatmentPlanID;
-    public string DoctorID;
-    public int GameState;
-    public int Score;
+    public string id;
+    public string userID;
+    public string firstName;
+    public string lastName;
+    public DateTime birthDate;
+    public DateTime nextAppointmentDate;
+    public string guardianID;
+    public string treatmentPlanID;
+    public string doctorID;
+    public int gameState;
+    public int score;
 
     public Patient()
     {
