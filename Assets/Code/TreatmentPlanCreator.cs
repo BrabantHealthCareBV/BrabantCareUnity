@@ -52,7 +52,6 @@ public static class TreatmentPlanCreator
         selectedSteps.AddRange(requiresSurgery ? routeBSteps : routeASteps);
         selectedSteps.AddRange(closingSteps);
 
-        // Generate care moments
         for (int i = 0; i < selectedSteps.Count; i++)
         {
             string careMomentID = Convert.ToString(Guid.NewGuid());
@@ -77,7 +76,6 @@ public static class TreatmentPlanCreator
             Debug.Log($"Generated CareMoment: {newCareMoment.name}, ID: {newCareMoment.id}");
         }
 
-        // Create TreatmentPlan
         TreatmentPlan treatmentPlan = new TreatmentPlan
         {
             id = treatmentPlanID,

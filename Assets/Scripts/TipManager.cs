@@ -7,14 +7,12 @@ public class TipManager : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown categoryDropdown;
     [SerializeField] private TMP_Text tipsText;
-    [SerializeField] private Image tipImage; // Image component voor de afbeelding
+    [SerializeField] private Image tipImage;
 
-    // Dictionary om categorieën te koppelen aan afbeeldingen
     private Dictionary<string, Sprite> tipImages = new Dictionary<string, Sprite>();
 
     private void Start()
     {
-        // Laad afbeeldingen (zorg dat ze in de Unity Inspector gekoppeld worden)
         tipImages["Beenbreuk"] = Resources.Load<Sprite>("Images/Beenbreuk");
         tipImages["Armbreuk"] = Resources.Load<Sprite>("Images/Armbreuk");
         tipImages["Gips drooghouden"] = Resources.Load<Sprite>("Images/Douchehoes");
@@ -41,7 +39,7 @@ public class TipManager : MonoBehaviour
         categoryDropdown.AddOptions(options);
         categoryDropdown.value = 0;
         tipsText.text = "";
-        tipImage.gameObject.SetActive(false); // Verberg afbeelding in het begin
+        tipImage.gameObject.SetActive(false);
         categoryDropdown.onValueChanged.AddListener(delegate { UpdateTips(); });
     }
 
@@ -59,15 +57,14 @@ public class TipManager : MonoBehaviour
         string selectedCategory = categoryDropdown.options[selectedIndex].text;
         tipsText.text = GetTips(selectedCategory);
 
-        // Update afbeelding als er een bestaat
         if (tipImages.ContainsKey(selectedCategory) && tipImages[selectedCategory] != null)
         {
             tipImage.sprite = tipImages[selectedCategory];
-            tipImage.gameObject.SetActive(true); // Toon afbeelding
+            tipImage.gameObject.SetActive(true);
         }
         else
         {
-            tipImage.gameObject.SetActive(false); // Verberg als er geen afbeelding is
+            tipImage.gameObject.SetActive(false);
         }
     }
 

@@ -10,7 +10,7 @@ public class PositiveMessageManager : MonoBehaviour
     public Button OkButton;
     public UnityEngine.UI.Image PopupImage;
 
-    private int lastIndex = -1; // Store the index of the last displayed image
+    private int lastIndex = -1;
 
     private void Start()
     {
@@ -41,7 +41,7 @@ public class PositiveMessageManager : MonoBehaviour
             randomIndex = Random.Range(0, PositiveImages.Count);
         } while (randomIndex == lastIndex);
 
-        lastIndex = randomIndex; // Update the last index
+        lastIndex = randomIndex; 
         Sprite selectedImage = PositiveImages[randomIndex];
 
         if (PopupImage != null)
