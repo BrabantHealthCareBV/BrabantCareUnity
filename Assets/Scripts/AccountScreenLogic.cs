@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,16 +72,16 @@ public class AccountScreenLogic : MonoBehaviour
 
         Debug.Log("KeepAlive initialized! Fetching data...");
 
-        brabantApp.FetchUserData();  // Fetch and populate data
+        brabantApp.FetchUserData();
 
-        updateUI();  // Set UI with the first patient/guardian by default
+        updateUI();
     }
 
     private void PopulatePatientDropdown()
     {
         patientDropdown.ClearOptions();
         List<string> options = new List<string>();
-
+        options.Add("Create");
         foreach (var patient in KeepAlive.Instance.StoredPatients)
         {
             options.Add($"{patient.firstName} {patient.lastName}");
@@ -92,7 +93,7 @@ public class AccountScreenLogic : MonoBehaviour
         if (options.Count > 0)
         {
             patientDropdown.value = 0;
-            KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[0];
+            //KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[0];
         }
 
     }
@@ -101,7 +102,7 @@ public class AccountScreenLogic : MonoBehaviour
     {
         guardianDropdown.ClearOptions();
         List<string> options = new List<string>();
-
+        options.Add("Create");
         foreach (var guardian in KeepAlive.Instance.StoredGuardians)
         {
             options.Add($"{guardian.firstName} {guardian.lastName}");
@@ -113,13 +114,17 @@ public class AccountScreenLogic : MonoBehaviour
         if (options.Count > 0)
         {
             guardianDropdown.value = 0;
-            KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[0];
+            //KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[0];
         }
     }
 
     private void OnPatientSelected(int index)
     {
-        if (index < KeepAlive.Instance.StoredPatients.Count)
+        if(index == 0)
+        {// create new patient
+            //patientSaveButtonClick();
+        }
+        if (index+1 < KeepAlive.Instance.StoredPatients.Count)
         {
             KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index];
             updateUI();
@@ -128,7 +133,11 @@ public class AccountScreenLogic : MonoBehaviour
 
     private void OnGuardianSelected(int index)
     {
-        if (index < KeepAlive.Instance.StoredGuardians.Count)
+        if(index == 0)
+        {// create new guardian
+            //guardianSaveButtonClick();
+        }
+        if (index+1 < KeepAlive.Instance.StoredGuardians.Count)
         {
             KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index];
             updateUI();
@@ -239,7 +248,7 @@ public class AccountScreenLogic : MonoBehaviour
         }
         WaitForKeepAliveAndUpdateUI();
     }
-    public void patientSaveButtonClick()
+    public async Task patientSaveButtonClickAsync()
     {
 
         if (PatientFields[0] != null && PatientFields.Length >= 2)
@@ -247,11 +256,21 @@ public class AccountScreenLogic : MonoBehaviour
             KeepAlive.Instance.StoredPatient.firstName = PatientFields[0].text;
             KeepAlive.Instance.StoredPatient.lastName = PatientFields[1].text;
         }
-        brabantApp.savetoApiPatient();
+        IWebRequestReponse response = await brabantApp.savetoApiPatientAsync();
+
+        if (response is WebRequestData<Patient>)
+        {
+            Debug.Log("Patient saved successfully.");
+            brabantApp.FetchUserData();
+        }
+        else if (response is WebRequestError errorResponse)
+        {
+            Debug.LogError("Failed to save patient: " + errorResponse.ErrorMessage);
+        }
         updateUI();
 
     }
-    public void guardianSaveButtonClick()
+    public async Task guardianSaveButtonClickAsync()
     {
 
         if (PatientFields[0] != null && PatientFields.Length >= 2)
@@ -259,7 +278,17 @@ public class AccountScreenLogic : MonoBehaviour
             KeepAlive.Instance.StoredGuardian.firstName = GuardianFields[0].text;
             KeepAlive.Instance.StoredGuardian.lastName = GuardianFields[1].text;
         }
-        brabantApp.savetoApiGuardian();
+        IWebRequestReponse response = await brabantApp.savetoApiGuardianAsync();
+
+        if (response is WebRequestData<Guardian>)
+        {
+            Debug.Log("Guardian saved successfully.");
+            brabantApp.FetchUserData();
+        }
+        else if (response is WebRequestError errorResponse)
+        {
+            Debug.LogError("Failed to save guardian: " + errorResponse.ErrorMessage);
+        }
         updateUI();
 
     }

@@ -8,7 +8,7 @@ public class GuardianApiClient : MonoBehaviour
     public WebClient webClient;
     private const string Route = "/api/guardians";
 
-    public async Awaitable<IWebRequestReponse> GetAllGuardian()
+    public async Awaitable<IWebRequestReponse> GetAll()
     {
         IWebRequestReponse webRequestResponse = await webClient.SendGetRequest(Route);
         return ParseGuardianResponse(webRequestResponse);

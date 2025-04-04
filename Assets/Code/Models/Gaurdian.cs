@@ -11,6 +11,6 @@ public class Guardian
 
     public Guardian()
     {
-
+        id = Convert.ToString(Guid.Empty);
     }
 }

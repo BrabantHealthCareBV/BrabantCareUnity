@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -46,7 +47,7 @@ public class BrabantApp : MonoBehaviour
 
 
 
-    public async void savetoApiGuardian()
+    public async Task<IWebRequestReponse> savetoApiGuardianAsync()
     {
         if (KeepAlive.Instance.UserToken != "")
         {
@@ -62,9 +63,11 @@ public class BrabantApp : MonoBehaviour
                 {
                     case WebRequestData<Guardian>:
                         Debug.Log("Guardian updated successfully.");
+                        return updateResponse;
                         break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Update guardian error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
                         break;
                 }
             }
@@ -77,17 +80,20 @@ public class BrabantApp : MonoBehaviour
                 {
                     case WebRequestData<Guardian>:
                         Debug.Log("Guardian created successfully.");
+                        return createResponse;
                         break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Create guardian error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
                         break;
                 }
             }
         }
+        return null;
     }
 
 
-    public async void savetoApiPatient()
+    public async Task<IWebRequestReponse> savetoApiPatientAsync()
     {
         if (KeepAlive.Instance.UserToken != "")
         {
@@ -103,9 +109,11 @@ public class BrabantApp : MonoBehaviour
                 {
                     case WebRequestData<Patient>:
                         Debug.Log("Patient updated successfully.");
+                        return updateResponse;
                         break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Update patient error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
                         break;
                 }
             }
@@ -118,13 +126,16 @@ public class BrabantApp : MonoBehaviour
                 {
                     case WebRequestData<Patient>:
                         Debug.Log("Patient created successfully.");
+                        return createResponse;
                         break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Create patient error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
                         break;
                 }
             }
         }
+        return null;
     }
 
 
@@ -140,7 +151,7 @@ public class BrabantApp : MonoBehaviour
 
         // Fetch patient data
         IWebRequestReponse patientResponse = await patientApiClient.GetAll();
-        //patientResponse = ParsePatientResponse(patientResponse);  // Parse the response
+        //guardianResponse = ParsePatientResponse(guardianResponse);  // Parse the response
 
         switch (patientResponse)
         {
@@ -159,8 +170,31 @@ public class BrabantApp : MonoBehaviour
                 throw new NotImplementedException("No implementation for webRequestResponse of class: " + patientResponse.GetType());
         }
 
+        // Fetch patient data
+        IWebRequestReponse guardianResponse = await guardianApiClient.GetAll();
+        //guardianResponse = ParsePatientResponse(guardianResponse);  // Parse the response
+
+        switch (guardianResponse)
+        {
+            case WebRequestData<List<Guardian>> dataResponse:
+                List<Guardian> guardians = dataResponse.Data;
+                Debug.Log("List of Guardians: ");
+                guardians.ForEach(guardian => Debug.Log(guardian.id));
+                KeepAlive.Instance.StoredGuardians = guardians;
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Read guardians error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + guardianResponse.GetType());
+        }
+
+
         // Update UI after fetching data
         updateUI();
+        accountScreenLogic.updateUI();
     }
 
     public void updateUI()

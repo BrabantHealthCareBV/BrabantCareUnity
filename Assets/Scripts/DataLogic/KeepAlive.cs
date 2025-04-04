@@ -9,7 +9,7 @@ public class KeepAlive : MonoBehaviour
     // Persistent Data
     //public Doctor StoredDoctor { get; set; }
     public Guardian StoredGuardian = new Guardian();
-    public Patient StoredPatient;
+    public Patient StoredPatient = new Patient();
     //public Doctor[] StoredDoctors { get; set; }
     public List<Patient> StoredPatients = new List<Patient>();
     public List<Guardian> StoredGuardians = new List<Guardian>();
