@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
+using UI.Dates;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,10 @@ public class AccountScreenLogic : MonoBehaviour
     public TMP_Dropdown patientDropdown;
     public TMP_Dropdown guardianDropdown;
     public TMP_Dropdown guardianPatientDropdown;
+    public TMP_Dropdown treatmentplanDropdown;
+    [Header("DatePickers")]
+    public DatePicker birthday;
+    public DatePicker nextAppointmentDay;
 
     [Header("Settings")]
     public string registerInfo;
@@ -78,6 +83,20 @@ public class AccountScreenLogic : MonoBehaviour
 
         updateUI();
     }
+    public void PopulateTreatmentPlanDropDown()
+    {
+        treatmentplanDropdown.ClearOptions();
+        List<string> options = new List<string>();
+        foreach (var treatmentPlan in KeepAlive.Instance.TreatmentPlans)
+        {
+            options.Add($"{treatmentPlan.name}");
+        }
+
+        treatmentplanDropdown.AddOptions(options);
+        treatmentplanDropdown.onValueChanged.AddListener(OnTreatmentPlanSelected);
+    }
+
+    
 
     public void PopulatePatientDropdown()
     {
@@ -91,57 +110,33 @@ public class AccountScreenLogic : MonoBehaviour
 
         patientDropdown.AddOptions(options);
         patientDropdown.onValueChanged.AddListener(OnPatientSelected);
-
-        //if (options.Count > 0)
-        //{
-        //    patientDropdown.value = 0;
-        //    //KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[0];
-        //}
-
     }
 
     public void PopulateGuardianDropdown()
     {
         guardianDropdown.ClearOptions();
-        guardianPatientDropdown.ClearOptions();
         List<string> options = new List<string>();
         options.Add("Create");
-
-
+        foreach (var guardian in KeepAlive.Instance.StoredGuardians)
+        {
+            options.Add($"{guardian.firstName} {guardian.lastName}");
+        }
         guardianDropdown.AddOptions(options);
-        options = new List<string>();
+
+
+        guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
+    }
+    public void PopulateGuardianPatientDropdown()
+    {
+        guardianPatientDropdown.ClearOptions();
+        List<string> options = new List<string>();
         foreach (var guardian in KeepAlive.Instance.StoredGuardians)
         {
             options.Add($"{guardian.firstName} {guardian.lastName}");
         }
         guardianPatientDropdown.AddOptions(options);
-        guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
         guardianPatientDropdown.onValueChanged.AddListener(OnGuardianPatientSelected);
-
-        //if (options.Count > 0)
-        //{
-        //    guardianDropdown.value = 0;
-        //    //KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[0];
-        //}
     }
-
-    private void OnPatientSelected(int index)
-    {
-        if (index == 0)
-        {
-            // "Create" was selected, so clear the selected patient
-            KeepAlive.Instance.StoredPatient = null;
-            Debug.Log("Create a new patient selected.");
-        }
-        else if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
-        {
-            // Select the corresponding patient from the list
-            KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index - 1]; // Subtract 1 to match the list index
-            Debug.Log($"Selected patient: {KeepAlive.Instance.StoredPatient.firstName} {KeepAlive.Instance.StoredPatient.lastName}");
-        }
-        updateUI();
-    }
-
     public void SetGuardianDropdownTo(string targetGuardianid)
     {
         Guardian targetGuardian = KeepAlive.Instance.StoredGuardians.Find(g => g.id == targetGuardianid);
@@ -151,36 +146,11 @@ public class AccountScreenLogic : MonoBehaviour
 
         int index = KeepAlive.Instance.StoredGuardians.IndexOf(targetGuardian);
 
-        guardianPatientDropdown.value = index; // +1 because "Create" is at index 0
+        guardianPatientDropdown.value = index;
         Debug.Log($"Dropdown set to: {targetGuardian.firstName} {targetGuardian.lastName}");
 
     }
 
-
-    private void OnGuardianSelected(int index)
-    {
-        if (index == 0)
-        {
-            // "Create" was selected, so clear the selected guardian
-            KeepAlive.Instance.StoredGuardian = null;
-            Debug.Log("Create a new guardian selected.");
-        }
-        else if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
-        {
-            KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index - 1];
-            Debug.Log($"Guardian selected:{KeepAlive.Instance.StoredGuardian.id}");
-        }
-        updateUI();
-    }
-    private void OnGuardianPatientSelected(int index)
-    {
-        if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
-        {
-            KeepAlive.Instance.StoredPatient.guardianID = KeepAlive.Instance.StoredGuardians[index].id;
-            Debug.Log($"Guardian selected:{KeepAlive.Instance.StoredGuardian.id}");
-        }
-        updateUI();
-    }
 
     #region statesetters
     public void setRegisterState()
@@ -231,19 +201,54 @@ public class AccountScreenLogic : MonoBehaviour
     {
         Debug.Log("Updating accountscreen ui");
 
-        if (PatientFields != null && PatientFields.Length >= 2 && KeepAlive.Instance.StoredPatient != null)
+        if (PatientFields != null && PatientFields.Length >= 2)
         {
-            PatientFields[0].text = KeepAlive.Instance.StoredPatient.firstName;
-            PatientFields[1].text = KeepAlive.Instance.StoredPatient.lastName;
+            string defaultFirstName = "Unknown";
+            string defaultLastName = "Unknown";
+            string defaultGuardianID = "";
+            DateTime defaultBirthDate = DateTime.Now;
+            DateTime defaultNextAppointmentDate = DateTime.Now;
+
+            if (KeepAlive.Instance.StoredPatient != null)
+            {
+                defaultFirstName = !string.IsNullOrEmpty(KeepAlive.Instance.StoredPatient.firstName)
+                    ? KeepAlive.Instance.StoredPatient.firstName
+                    : defaultFirstName;
+
+                defaultLastName = !string.IsNullOrEmpty(KeepAlive.Instance.StoredPatient.lastName)
+                    ? KeepAlive.Instance.StoredPatient.lastName
+                    : defaultLastName;
+
+                defaultGuardianID = !string.IsNullOrEmpty(KeepAlive.Instance.StoredPatient.guardianID)
+                    ? KeepAlive.Instance.StoredPatient.guardianID
+                    : defaultGuardianID;
+
+                defaultBirthDate = KeepAlive.Instance.StoredPatient.BirthDate != DateTime.MinValue
+                    ? KeepAlive.Instance.StoredPatient.BirthDate
+                    : defaultBirthDate;
+
+                defaultNextAppointmentDate = KeepAlive.Instance.StoredPatient.NextAppointmentDate != DateTime.MinValue
+                    ? KeepAlive.Instance.StoredPatient.NextAppointmentDate
+                    : defaultNextAppointmentDate;
+
+            }
+
+            PatientFields[0].text = defaultFirstName;
+            PatientFields[1].text = defaultLastName;
+            SetGuardianDropdownTo(defaultGuardianID);
+            birthday.SelectedDate = defaultBirthDate;
+            birthday.VisibleDate = defaultBirthDate;
+            nextAppointmentDay.SelectedDate = defaultNextAppointmentDate;
+            nextAppointmentDay.VisibleDate = defaultNextAppointmentDate;
+            Debug.Log($"Set values - Name: {defaultFirstName} {defaultLastName}, GuardianID: {defaultGuardianID}, BirthDate: {defaultBirthDate}");
         }
+
 
         if (GuardianFields != null && GuardianFields.Length >= 2 && KeepAlive.Instance.StoredGuardian != null)
         {
             GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.firstName;
             GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.lastName;
-            SetGuardianDropdownTo(KeepAlive.Instance.StoredPatient.guardianID);
         }
-
         brabantApp.updateUI();
 
         if (KeepAlive.Instance.UserToken == "" || KeepAlive.Instance.UserToken == null)
@@ -287,6 +292,7 @@ public class AccountScreenLogic : MonoBehaviour
     public async void patientSaveButtonClickAsync()
     {
 
+        Debug.Log("Patient saving to api.");
         if (PatientFields[0] != null && PatientFields.Length >= 2)
         {
             KeepAlive.Instance.StoredPatient.firstName = PatientFields[0].text;
@@ -301,12 +307,14 @@ public class AccountScreenLogic : MonoBehaviour
         }
         else if (response is WebRequestError errorResponse)
         {
-            Debug.LogError("Failed to save patient: " + errorResponse.ErrorMessage);
+            Debug.LogError("Failed to save patient: " + errorResponse.ErrorMessage );
         }
         else
         {
             Debug.Log($"Got webresponse {response.GetType()}");
         }
+        KeepAlive.Instance.StoredPatient = null;
+
     }
     public async void guardianSaveButtonClickAsync()
     {
@@ -331,6 +339,7 @@ public class AccountScreenLogic : MonoBehaviour
         {
             Debug.Log($"Got webresponse {response.GetType()}");
         }
+        KeepAlive.Instance.StoredGuardian = null;
 
     }
     #endregion
@@ -400,7 +409,6 @@ public class AccountScreenLogic : MonoBehaviour
     #endregion
 
     #region callbacks
-
     private void AddFieldListeners()
     {
         if (PatientFields != null && PatientFields.Length >= 2)
@@ -420,6 +428,62 @@ public class AccountScreenLogic : MonoBehaviour
             //GuardianFields[1].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
             GuardianFields[1].onEndEdit.AddListener(delegate { OnGuardianDataChanged(); });
         }
+        birthday.Config.Events.OnDaySelected.AddListener(OnBirthdayPicked);
+        nextAppointmentDay.Config.Events.OnDaySelected.AddListener(OnNextAppointmentDayPicked);
+    }
+    public void OnBirthdayPicked(DateTime date)
+    {
+        KeepAlive.Instance.StoredPatient.BirthDate = date;
+    }
+    public void OnNextAppointmentDayPicked(DateTime date)
+    {
+        KeepAlive.Instance.StoredPatient.NextAppointmentDate = date;
+    }
+    private void OnPatientSelected(int index)
+    {
+        if (index == 0)
+        {
+            KeepAlive.Instance.StoredPatient = null;
+            Debug.Log("Create a new patient selected.");
+        }
+        else if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
+        {
+            KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index - 1];
+            Debug.Log($"Selected patient: {KeepAlive.Instance.StoredPatient.firstName} {KeepAlive.Instance.StoredPatient.lastName}");
+        }
+        updateUI();
+    }
+    private void OnGuardianSelected(int index)
+    {
+        if (index == 0)
+        {
+            KeepAlive.Instance.StoredGuardian = null;
+            Debug.Log("Create a new guardian selected.");
+        }
+        else if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
+        {
+            KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index - 1];
+            Debug.Log($"Guardian selected:{KeepAlive.Instance.StoredGuardian.id}");
+        }
+        updateUI();
+    }
+    private void OnGuardianPatientSelected(int index)
+    {
+        if (index < KeepAlive.Instance.StoredGuardians.Count)
+        {
+            KeepAlive.Instance.StoredPatient.guardianID = KeepAlive.Instance.StoredGuardians[index].id;
+            Debug.Log($"Guardian selected:{KeepAlive.Instance.StoredGuardian.id}");
+        }
+        updateUI();
+    }
+    private void OnTreatmentPlanSelected(int index)
+    {
+        if (index < KeepAlive.Instance.TreatmentPlans.Count)
+        {
+            KeepAlive.Instance.StoredPatient.treatmentPlanID = KeepAlive.Instance.TreatmentPlans[index].id;
+            Debug.Log($"Guardian selected:{KeepAlive.Instance.StoredPatient.treatmentPlanID}");
+        }
+        updateUI();
     }
 
 

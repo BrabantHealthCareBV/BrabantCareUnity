@@ -16,6 +16,12 @@ public class PatientApiClient : MonoBehaviour
 
     public async Awaitable<IWebRequestReponse> CreatePatient(Patient patient)
     {
+        if (patient.id == "")
+            patient.id = Convert.ToString(Guid.Empty);
+
+        if (patient.userID == "")
+            patient.userID = Convert.ToString(Guid.Empty);
+
         if (patient.doctorID == "")
             patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
@@ -24,6 +30,12 @@ public class PatientApiClient : MonoBehaviour
     }
     public async Awaitable<IWebRequestReponse> UpdatePatient(Patient patient)
     {
+        if (patient.id == "")
+            patient.id = Convert.ToString(Guid.Empty);
+
+        if (patient.userID == "")
+            patient.userID = Convert.ToString(Guid.Empty);
+
         if (patient.doctorID == "")
             patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
@@ -73,8 +85,9 @@ public class PatientApiClient : MonoBehaviour
         switch (webRequestResponse)
         {
             case WebRequestData<string> data:
+                if (data.Data == "" || data.Data == "[]")
+                    return webRequestResponse;
                 Debug.Log("Patient Response data raw: " + data.Data);
-
                 try
                 {
                     // Deserialize JSON as a single Patient object
@@ -86,7 +99,6 @@ public class PatientApiClient : MonoBehaviour
                     Debug.LogError("Failed to parse patient response: " + ex.Message);
                     return new WebRequestError("Invalid patient data format");
                 }
-
             default:
                 return webRequestResponse;
         }

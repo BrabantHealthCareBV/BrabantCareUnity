@@ -16,6 +16,7 @@ public class BrabantApp : MonoBehaviour
     public UserApiClient userApiClient;
     public PatientApiClient patientApiClient;
     public GuardianApiClient guardianApiClient;
+    public TreatmentPlanApiClient treatmentPlanApiClient;
     public ScreenLogic screenLogic;
     public AccountScreenLogic accountScreenLogic;
 
@@ -42,7 +43,7 @@ public class BrabantApp : MonoBehaviour
         //    Debug.Log($"Generated Patient: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}, GuardianID: {KeepAlive.Instance.StoredPatient.GuardianID}, DoctorID: {KeepAlive.Instance.StoredPatient.DoctorID}");
 
         //}
-        FetchUserData();
+        //FetchUserData();
     }
 
 
@@ -148,7 +149,6 @@ public class BrabantApp : MonoBehaviour
 
         // Fetch patient data
         IWebRequestReponse patientResponse = await patientApiClient.GetAll();
-        //guardianResponse = ParsePatientListResponse(guardianResponse);  // Parse the response
 
         switch (patientResponse)
         {
@@ -167,9 +167,8 @@ public class BrabantApp : MonoBehaviour
                 throw new NotImplementedException("No implementation for webRequestResponse of class: " + patientResponse.GetType());
         }
 
-        // Fetch patient data
+        // Fetch guardian data
         IWebRequestReponse guardianResponse = await guardianApiClient.GetAll();
-        //guardianResponse = ParsePatientListResponse(guardianResponse);  // Parse the response
 
         switch (guardianResponse)
         {
@@ -187,12 +186,32 @@ public class BrabantApp : MonoBehaviour
             default:
                 throw new NotImplementedException("No implementation for webRequestResponse of class: " + guardianResponse.GetType());
         }
+        // Fetch treatmentplan data
+        IWebRequestReponse treatmentPlanResponse = await treatmentPlanApiClient.GetAll();
 
+        switch (treatmentPlanResponse)
+        {
+            case WebRequestData<List<TreatmentPlan>> dataResponse:
+                List<TreatmentPlan> treatmentPlans = dataResponse.Data;
+                Debug.Log("List of TreatmentPlan: ");
+                treatmentPlans.ForEach(treatmentplan => Debug.Log(treatmentplan.id));
+                KeepAlive.Instance.TreatmentPlans = treatmentPlans;
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Read Treatmentplan error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + treatmentPlanResponse.GetType());
+        }
 
         // Update UI after fetching data
         updateUI();
         accountScreenLogic.PopulatePatientDropdown();
         accountScreenLogic.PopulateGuardianDropdown();
+        accountScreenLogic.PopulateGuardianPatientDropdown();
+        accountScreenLogic.PopulateTreatmentPlanDropDown();
         accountScreenLogic.updateUI();
     }
 

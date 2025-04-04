@@ -7,14 +7,11 @@ public class KeepAlive : MonoBehaviour
     public static KeepAlive Instance { get; set; }
 
     // Persistent Data
-    //public Doctor StoredDoctor { get; set; }
     public Guardian StoredGuardian = new Guardian();
     public Patient StoredPatient = new Patient();
-    //public Doctor[] StoredDoctors { get; set; }
     public List<Patient> StoredPatients = new List<Patient>();
     public List<Guardian> StoredGuardians = new List<Guardian>();
-    //public Patient SelectedPatient { get; set; } = new();
-    //public Guardian SelectedGuardian { get; set; } = new();
+    public List<TreatmentPlan> TreatmentPlans = new List<TreatmentPlan>();
     public string _userToken = "";
     public string UserToken
     {
