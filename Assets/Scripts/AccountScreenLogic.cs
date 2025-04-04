@@ -109,7 +109,6 @@ public class AccountScreenLogic : MonoBehaviour
         }
 
         patientDropdown.AddOptions(options);
-        patientDropdown.onValueChanged.AddListener(OnPatientSelected);
     }
 
     public void PopulateGuardianDropdown()
@@ -124,7 +123,6 @@ public class AccountScreenLogic : MonoBehaviour
         guardianDropdown.AddOptions(options);
 
 
-        guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
     }
     public void PopulateGuardianPatientDropdown()
     {
@@ -135,7 +133,6 @@ public class AccountScreenLogic : MonoBehaviour
             options.Add($"{guardian.firstName} {guardian.lastName}");
         }
         guardianPatientDropdown.AddOptions(options);
-        guardianPatientDropdown.onValueChanged.AddListener(OnGuardianPatientSelected);
     }
     public void SetGuardianDropdownTo(string targetGuardianid)
     {
@@ -147,6 +144,8 @@ public class AccountScreenLogic : MonoBehaviour
         int index = KeepAlive.Instance.StoredGuardians.IndexOf(targetGuardian);
 
         guardianPatientDropdown.value = index;
+        KeepAlive.Instance.StoredPatient.guardianID = targetGuardianid;
+        
         Debug.Log($"Dropdown set to: {targetGuardian.firstName} {targetGuardian.lastName}");
 
     }
@@ -156,8 +155,8 @@ public class AccountScreenLogic : MonoBehaviour
     public void setRegisterState()
     {
         currentState = AccountState.Register;
-        PatientRegion.SetActive(true);
-        GuardianRegion.SetActive(true);
+        PatientRegion.SetActive(false);
+        GuardianRegion.SetActive(false);
         AccountLoginRegion.SetActive(true);
         infoText.text = registerInfo;
         UpdateButtonStates("RegisterButton");
@@ -430,6 +429,9 @@ public class AccountScreenLogic : MonoBehaviour
         }
         birthday.Config.Events.OnDaySelected.AddListener(OnBirthdayPicked);
         nextAppointmentDay.Config.Events.OnDaySelected.AddListener(OnNextAppointmentDayPicked);
+        guardianPatientDropdown.onValueChanged.AddListener(OnGuardianPatientSelected);
+        guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
+        patientDropdown.onValueChanged.AddListener(OnPatientSelected);
     }
     public void OnBirthdayPicked(DateTime date)
     {
@@ -443,7 +445,7 @@ public class AccountScreenLogic : MonoBehaviour
     {
         if (index == 0)
         {
-            KeepAlive.Instance.StoredPatient = null;
+            KeepAlive.Instance.StoredPatient = new Patient();
             Debug.Log("Create a new patient selected.");
         }
         else if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)

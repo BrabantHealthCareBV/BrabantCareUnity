@@ -221,7 +221,7 @@ public class BrabantApp : MonoBehaviour
             return;
 
         string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.firstName} {KeepAlive.Instance.StoredPatient.lastName}\n";
-        patientInfo += "Next Appointment: TBD";
+        //patientInfo += "Next Appointment: TBD";
 
         if (personalInfo != null)
         {
@@ -248,30 +248,30 @@ public class BrabantApp : MonoBehaviour
             case WebRequestData<string> dataResponse:
                 Debug.Log("Register succes!");
 
-                IWebRequestReponse loginWebRequestResponse = await userApiClient.Login(user);
+                //IWebRequestReponse loginWebRequestResponse = await userApiClient.Login(user);
 
-                switch (loginWebRequestResponse)
-                {
-                    case WebRequestData<string> loginDataResponse:
-                        Debug.Log("Login succes!");
+                //switch (loginWebRequestResponse)
+                //{
+                //    case WebRequestData<string> loginDataResponse:
+                //        Debug.Log("Login succes!");
 
-                        FetchUserData();
-                        screenLogic.ShowHomeScreen();
+                //        FetchUserData();
+                //        screenLogic.ShowHomeScreen();
 
-                        // TODO: Todo handle succes scenario.
-                        // TODO: doorverwijzen naar de tijdlijn.
-                        break;
-                    case WebRequestError errorResponse:
-                        string loginErrorMessage = errorResponse.ErrorMessage;
-                        Debug.Log("Login error: " + loginErrorMessage);
-                        // TODO: Handle error scenario. Show the errormessage to the user.
-                        //messageText.text = "Login error: " + loginErrorMessage;
-                        break;
-                    default:
-                        throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + loginWebRequestResponse.GetType());
-                }
+                //        // TODO: Todo handle succes scenario.
+                //        // TODO: doorverwijzen naar de tijdlijn.
+                //        break;
+                //    case WebRequestError errorResponse:
+                //        string loginErrorMessage = errorResponse.ErrorMessage;
+                //        Debug.Log("Login error: " + loginErrorMessage);
+                //        // TODO: Handle error scenario. Show the errormessage to the user.
+                //        //messageText.text = "Login error: " + loginErrorMessage;
+                //        break;
+                //    default:
+                //        throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + loginWebRequestResponse.GetType());
+                //}
                 // TODO: Handle succes scenario;
-                //messageText.text = "Register succes!";
+                accountScreenLogic.infoText.text = "Register succes!";
                 break;
             case WebRequestError errorResponse:
                 string errorMessage = errorResponse.ErrorMessage;
