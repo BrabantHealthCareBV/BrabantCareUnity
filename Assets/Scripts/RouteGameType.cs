@@ -27,9 +27,6 @@ public class RouteGameType : MonoBehaviour
         }
     }
 
-
-
-
     public void GreyAreaActivation()
     { 
         if (routeChoice == "routeA")

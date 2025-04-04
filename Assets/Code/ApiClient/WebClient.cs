@@ -43,7 +43,7 @@ public class WebClient : MonoBehaviour
         string url = baseUrl + route;
         Debug.Log("Creating " + type + " request to " + url + " with data: " + data);
 
-        data = RemoveIdFromJson(data); // Backend throws error if it receiving empty strings as a GUID value.
+        data = RemoveIdFromJson(data);
         var webRequest = new UnityWebRequest(url, type);
         byte[] dataInBytes = new UTF8Encoding().GetBytes(data);
         webRequest.uploadHandler = new UploadHandlerRaw(dataInBytes);

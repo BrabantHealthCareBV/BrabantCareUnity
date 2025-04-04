@@ -59,38 +59,31 @@ public class BrabantApp : MonoBehaviour
             return;
         }
 
-        // Update Patient fields (name and surname)
         if (PatientFields != null && PatientFields.Length >= 2)
         {
-            PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;  // name field
-            PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;   // surname field
+            PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;
+            PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;
         }
 
-        // Update Guardian fields (name and surname)
         if (GuardianFields != null && GuardianFields.Length >= 2)
         {
-            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;  // name field
-            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;   // surname field
+            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;
+            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;
         }
         DisplayPatientInfo();
     }
 
     private void DisplayPatientInfo()
     {
-        // Assuming that you want to display the patient's name and next appointment info in the TMP_Text field
         string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}\n";
 
-        // Assuming you have the next appointment date as part of the treatment plan
         string nextAppointment = "Next Appointment: ";
 
-        // Fetch the next appointment from the treatment plan
-        string appointmentDate = "TBD"; // Replace this with actual logic to fetch the next appointment date
+        string appointmentDate = "TBD";
         nextAppointment += appointmentDate;
 
-        // Combine the information
         patientInfo += nextAppointment;
 
-        // Set the text of the TMP_Text component
         if (personalInfo != null)
         {
             personalInfo.text = patientInfo;
