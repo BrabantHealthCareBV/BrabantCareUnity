@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public static class TreatmentPlanCreator
 {
-    static public TreatmentPlan GenerateFractureTreatmentPlan(Guid patientID, Guid doctorID, bool requiresSurgery)
+    static public TreatmentPlan GenerateFractureTreatmentPlan(string patientID, string doctorID, bool requiresSurgery)
     {
-        Guid treatmentPlanID = Guid.NewGuid();
-        List<Guid> careMomentIDs = new List<Guid>();
+        string treatmentPlanID = Convert.ToString(Guid.NewGuid());
+        List<string> careMomentIDs = new List<string>();
         List<TreatmentPlan_CareMoment> treatmentPlanCareMoments = new List<TreatmentPlan_CareMoment>();
 
         List<string> generalSteps = new List<string>
@@ -55,38 +55,38 @@ public static class TreatmentPlanCreator
         // Generate care moments
         for (int i = 0; i < selectedSteps.Count; i++)
         {
-            Guid careMomentID = Guid.NewGuid();
+            string careMomentID = Convert.ToString(Guid.NewGuid());
             careMomentIDs.Add(careMomentID);
 
             CareMoment newCareMoment = new CareMoment
             {
-                ID = careMomentID,
-                Name = selectedSteps[i],
-                Url = "",
-                Image = new byte[0],
-                DurationInMinutes = UnityEngine.Random.Range(10, 60)
+                id = careMomentID,
+                name = selectedSteps[i],
+                url = "",
+                image = new byte[0],
+                durationInMinutes = UnityEngine.Random.Range(10, 60)
             };
 
             treatmentPlanCareMoments.Add(new TreatmentPlan_CareMoment
             {
-                TreatmentPlanID = treatmentPlanID,
-                CareMomentID = careMomentID,
-                Order = i + 1
+                treatmentPlanID = treatmentPlanID,
+                careMomentID = careMomentID,
+                order = i + 1
             });
 
-            Debug.Log($"Generated CareMoment: {newCareMoment.Name}, ID: {newCareMoment.ID}");
+            Debug.Log($"Generated CareMoment: {newCareMoment.name}, ID: {newCareMoment.id}");
         }
 
         // Create TreatmentPlan
         TreatmentPlan treatmentPlan = new TreatmentPlan
         {
-            ID = treatmentPlanID,
-            Name = "Gipsbehandeling",
-            PatientIDs = new List<Guid> { patientID },
-            CareMomentIDs = careMomentIDs
+            id = treatmentPlanID,
+            name = "Gipsbehandeling",
+            patientIDs = new List<string> { patientID },
+            careMomentIDs = careMomentIDs
         };
 
-        Debug.Log($"Generated TreatmentPlan: {treatmentPlan.Name}, Assigned Patient: {patientID}, Doctor: {doctorID}");
+        Debug.Log($"Generated TreatmentPlan: {treatmentPlan.name}, Assigned Patient: {patientID}, Doctor: {doctorID}");
 
         return treatmentPlan;
     }

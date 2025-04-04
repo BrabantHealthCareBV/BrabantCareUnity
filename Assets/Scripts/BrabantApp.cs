@@ -1,96 +1,228 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
 public class BrabantApp : MonoBehaviour
 {
+    [Header("Test Data")]
+    public User user;
+    public Guardian guardian;
+    public Patient patient;
+
+    [Header("Dependencies")]
+    public UserApiClient userApiClient;
+    public PatientApiClient patientApiClient;
+    public GuardianApiClient guardianApiClient;
+    public TreatmentPlanApiClient treatmentPlanApiClient;
+    public ScreenLogic screenLogic;
+    public AccountScreenLogic accountScreenLogic;
 
     [Header("Settings")]
-    public bool GenerateDate = true;
+    public bool GenerateDate;
     public bool requiresSurgery;
-
-    [Header("User Edit fields")]
-    public GameObject PatientRegion;
-    public GameObject GaurdianRegion;
-    [Header("User Login fields")]
-    public GameObject AccountLoginRegion;
-
-    [Header("User Register fields")]
-    public GameObject PatientRegisterRegion;
-    public GameObject GaurdianRegisterRegion;
-    public GameObject AccountRegisterRegion;
-
     [Header("Personal Info")]
     public TMP_Text personalInfo;
 
 
-    private TMP_InputField[] PatientFields;
-    private TMP_InputField[] GuardianFields;
     void Start()
     {
-        PatientFields = GetInputFieldsFromGameObject(PatientRegion);
-        GuardianFields = GetInputFieldsFromGameObject(GaurdianRegion);
+        //if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
+        //{
+        //    KeepAlive.Instance.StoredDoctor = TestdataGenerator.GenerateDoctor();
+        //    KeepAlive.Instance.StoredGuardian = TestdataGenerator.GenerateGuardian();
+        //    KeepAlive.Instance.StoredPatient = TestdataGenerator.GeneratePatient(
+        //        KeepAlive.Instance.StoredGuardian.ID,
+        //        KeepAlive.Instance.StoredDoctor.ID
+        //    );
 
-        if (GenerateDate && KeepAlive.Instance.StoredPatient == null)
-        {
-            KeepAlive.Instance.StoredDoctor = TestdataGenerator.GenerateDoctor();
-            KeepAlive.Instance.StoredGuardian = TestdataGenerator.GenerateGuardian();
-            KeepAlive.Instance.StoredPatient = TestdataGenerator.GeneratePatient(
-                KeepAlive.Instance.StoredGuardian.ID,
-                KeepAlive.Instance.StoredDoctor.ID
-            );
+        //    Debug.Log($"Generated Doctor: {KeepAlive.Instance.StoredDoctor.Name}, Specialization: {KeepAlive.Instance.StoredDoctor.Specialization}, ID: {KeepAlive.Instance.StoredDoctor.ID}");
+        //    Debug.Log($"Generated Guardian: {KeepAlive.Instance.StoredGuardian.FirstName} {KeepAlive.Instance.StoredGuardian.LastName}, ID: {KeepAlive.Instance.StoredGuardian.ID}");
+        //    Debug.Log($"Generated Patient: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}, GuardianID: {KeepAlive.Instance.StoredPatient.GuardianID}, DoctorID: {KeepAlive.Instance.StoredPatient.DoctorID}");
 
-            Debug.Log($"Generated Doctor: {KeepAlive.Instance.StoredDoctor.Name}, Specialization: {KeepAlive.Instance.StoredDoctor.Specialization}, ID: {KeepAlive.Instance.StoredDoctor.ID}");
-            Debug.Log($"Generated Guardian: {KeepAlive.Instance.StoredGuardian.FirstName} {KeepAlive.Instance.StoredGuardian.LastName}, ID: {KeepAlive.Instance.StoredGuardian.ID}");
-            Debug.Log($"Generated Patient: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}, GuardianID: {KeepAlive.Instance.StoredPatient.GuardianID}, DoctorID: {KeepAlive.Instance.StoredPatient.DoctorID}");
-
-        }
-
-        UpdateData();
-
-        AddFieldListeners();
+        //}
+        //FetchUserData();
     }
 
 
-    public void UpdateData()
+
+    public async Task<IWebRequestReponse> savetoApiGuardianAsync()
     {
-        if (KeepAlive.Instance.StoredPatient == null || KeepAlive.Instance.StoredGuardian == null)
+        if (KeepAlive.Instance.UserToken != "")
         {
-            Debug.LogWarning("No stored patient or guardian data found.");
+            // Check if the guardian exists
+            IWebRequestReponse existingResponse = await guardianApiClient.GetById(KeepAlive.Instance.StoredGuardian.id);
+
+            if (existingResponse is WebRequestData<Guardian>)
+            {
+                Debug.Log("Guardian exists, updating...");
+                IWebRequestReponse updateResponse = await guardianApiClient.UpdateGuardian(KeepAlive.Instance.StoredGuardian);
+
+                switch (updateResponse)
+                {
+                    case WebRequestData<Guardian>:
+                        Debug.Log("Guardian updated successfully.");
+                        return updateResponse;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Update guardian error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                Debug.Log("Guardian does not exist, creating...");
+                IWebRequestReponse createResponse = await guardianApiClient.CreateGuardian(KeepAlive.Instance.StoredGuardian);
+
+                switch (createResponse)
+                {
+                    case WebRequestData<Guardian>:
+                        Debug.Log("Guardian created successfully.");
+                        return createResponse;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Create guardian error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
+                    default:
+                        return null;
+                }
+            }
+        }
+        else
+            return null;
+    }
+
+
+    public async Task<IWebRequestReponse> savetoApiPatientAsync()
+    {
+        if (KeepAlive.Instance.UserToken != "")
+        {
+            // Check if the patient exists
+            IWebRequestReponse existingResponse = await patientApiClient.GetById(KeepAlive.Instance.StoredPatient.id);
+
+            if (existingResponse is WebRequestData<Patient>)
+            {
+                Debug.Log("Patient exists, updating...");
+                IWebRequestReponse updateResponse = await patientApiClient.UpdatePatient(KeepAlive.Instance.StoredPatient);
+
+                switch (updateResponse)
+                {
+                    case WebRequestData<Patient>:
+                        Debug.Log("Patient updated successfully.");
+                        return updateResponse;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Update patient error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
+                }
+            }
+            else
+            {
+                Debug.Log($"Patient does not exist, creating... {existingResponse.GetType()}");
+                IWebRequestReponse createResponse = await patientApiClient.CreatePatient(KeepAlive.Instance.StoredPatient);
+
+                switch (createResponse)
+                {
+                    case WebRequestData<Patient>:
+                        Debug.Log("Patient created successfully.");
+                        return createResponse;
+                    case WebRequestError errorResponse:
+                        Debug.LogError("Create patient error: " + errorResponse.ErrorMessage);
+                        return errorResponse;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    public async void FetchUserData()
+    {
+        if (string.IsNullOrEmpty(KeepAlive.Instance.UserToken))
+        {
+            Debug.Log("User is not logged in. Skipping data fetch.");
             return;
         }
 
-        // Update Patient fields (name and surname)
-        if (PatientFields != null && PatientFields.Length >= 2)
+        Debug.Log("Fetching user data...");
+
+        // Fetch patient data
+        IWebRequestReponse patientResponse = await patientApiClient.GetAll();
+
+        switch (patientResponse)
         {
-            PatientFields[0].text = KeepAlive.Instance.StoredPatient.FirstName;  // name field
-            PatientFields[1].text = KeepAlive.Instance.StoredPatient.LastName;   // surname field
+            case WebRequestData<List<Patient>> dataResponse:
+                List<Patient> patients = dataResponse.Data;
+                Debug.Log("List of Patients: ");
+                patients.ForEach(patient => Debug.Log(patient.id));
+                KeepAlive.Instance.StoredPatients = patients;
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Read patients error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + patientResponse.GetType());
         }
 
-        // Update Guardian fields (name and surname)
-        if (GuardianFields != null && GuardianFields.Length >= 2)
+        // Fetch guardian data
+        IWebRequestReponse guardianResponse = await guardianApiClient.GetAll();
+
+        switch (guardianResponse)
         {
-            GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.FirstName;  // name field
-            GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.LastName;   // surname field
+            case WebRequestData<List<Guardian>> dataResponse:
+                List<Guardian> guardians = dataResponse.Data;
+                Debug.Log("List of Guardians: ");
+                guardians.ForEach(guardian => Debug.Log(guardian.id));
+                KeepAlive.Instance.StoredGuardians = guardians;
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Read guardians error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + guardianResponse.GetType());
         }
-        DisplayPatientInfo();
+        // Fetch treatmentplan data
+        IWebRequestReponse treatmentPlanResponse = await treatmentPlanApiClient.GetAll();
+
+        switch (treatmentPlanResponse)
+        {
+            case WebRequestData<List<TreatmentPlan>> dataResponse:
+                List<TreatmentPlan> treatmentPlans = dataResponse.Data;
+                Debug.Log("List of TreatmentPlan: ");
+                treatmentPlans.ForEach(treatmentplan => Debug.Log(treatmentplan.id));
+                KeepAlive.Instance.TreatmentPlans = treatmentPlans;
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Read Treatmentplan error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                break;
+            default:
+                throw new NotImplementedException("No implementation for webRequestResponse of class: " + treatmentPlanResponse.GetType());
+        }
+
+        // Update UI after fetching data
+        updateUI();
+        accountScreenLogic.PopulatePatientDropdown();
+        accountScreenLogic.PopulateGuardianDropdown();
+        accountScreenLogic.PopulateGuardianPatientDropdown();
+        accountScreenLogic.PopulateTreatmentPlanDropDown();
+        accountScreenLogic.updateUI();
     }
 
-    private void DisplayPatientInfo()
+    public void updateUI()
     {
-        // Assuming that you want to display the patient's name and next appointment info in the TMP_Text field
-        string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.FirstName} {KeepAlive.Instance.StoredPatient.LastName}\n";
+        if (KeepAlive.Instance.StoredPatient == null)
+            return;
 
-        // Assuming you have the next appointment date as part of the treatment plan
-        string nextAppointment = "Next Appointment: ";
+        string patientInfo = $"Patient Name: {KeepAlive.Instance.StoredPatient.firstName} {KeepAlive.Instance.StoredPatient.lastName}\n";
+        patientInfo += "Next Appointment: TBD";
 
-        // Fetch the next appointment from the treatment plan
-        string appointmentDate = "TBD"; // Replace this with actual logic to fetch the next appointment date
-        nextAppointment += appointmentDate;
-
-        // Combine the information
-        patientInfo += nextAppointment;
-
-        // Set the text of the TMP_Text component
         if (personalInfo != null)
         {
             personalInfo.text = patientInfo;
@@ -101,61 +233,83 @@ public class BrabantApp : MonoBehaviour
         }
     }
 
-    public TMP_InputField[] GetInputFieldsFromGameObject(GameObject mainGameObject)
+    #region Login
+
+    [ContextMenu("User/Register")]
+    public async void Register()
     {
-        Transform fieldsGameObject = mainGameObject.transform.Find("Fields");
-        if (fieldsGameObject != null)
-        {
-            TMP_InputField nameField = fieldsGameObject.Find("NameField")?.GetComponent<TMP_InputField>();
-            TMP_InputField surnameField = fieldsGameObject.Find("SurnameField")?.GetComponent<TMP_InputField>();
+        user = new User(accountScreenLogic.LoginFields[0].text, accountScreenLogic.LoginFields[1].text);
 
-            if (nameField == null || surnameField == null)
-            {
-                Debug.LogError("Name field or surname field is missing.");
-            }
 
-            return new TMP_InputField[] { nameField, surnameField };
-        }
-        else
+        IWebRequestReponse webRequestResponse = await userApiClient.Register(user);
+
+        switch (webRequestResponse)
         {
-            Debug.LogWarning("Fields not found in mainGameObject");
-            return null;
+            case WebRequestData<string> dataResponse:
+                Debug.Log("Register succes!");
+
+                IWebRequestReponse loginWebRequestResponse = await userApiClient.Login(user);
+
+                switch (loginWebRequestResponse)
+                {
+                    case WebRequestData<string> loginDataResponse:
+                        Debug.Log("Login succes!");
+
+                        FetchUserData();
+                        screenLogic.ShowHomeScreen();
+
+                        // TODO: Todo handle succes scenario.
+                        // TODO: doorverwijzen naar de tijdlijn.
+                        break;
+                    case WebRequestError errorResponse:
+                        string loginErrorMessage = errorResponse.ErrorMessage;
+                        Debug.Log("Login error: " + loginErrorMessage);
+                        // TODO: Handle error scenario. Show the errormessage to the user.
+                        //messageText.text = "Login error: " + loginErrorMessage;
+                        break;
+                    default:
+                        throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + loginWebRequestResponse.GetType());
+                }
+                // TODO: Handle succes scenario;
+                //messageText.text = "Register succes!";
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Register error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                //messageText.text = "Register error: " + ErrorMessage;
+                break;
+            default:
+                throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + webRequestResponse.GetType());
         }
     }
 
-    private void AddFieldListeners()
+    [ContextMenu("User/Login")]
+    public async void Login()
     {
-        if (PatientFields != null && PatientFields.Length >= 2)
-        {
-            PatientFields[0].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
-            PatientFields[1].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
-        }
+        user = new User(accountScreenLogic.LoginFields[0].text, accountScreenLogic.LoginFields[1].text);
 
-        if (GuardianFields != null && GuardianFields.Length >= 2)
+        IWebRequestReponse webRequestResponse = await userApiClient.Login(user);
+
+        switch (webRequestResponse)
         {
-            GuardianFields[0].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
-            GuardianFields[1].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
+            case WebRequestData<string> dataResponse:
+                Debug.Log("Login succes!");
+                FetchUserData();
+                screenLogic.ShowHomeScreen();
+                // TODO: Todo handle succes scenario.
+                // TODO: doorverwijzen naar de tijdlijn.
+                break;
+            case WebRequestError errorResponse:
+                string errorMessage = errorResponse.ErrorMessage;
+                Debug.Log("Login error: " + errorMessage);
+                // TODO: Handle error scenario. Show the errormessage to the user.
+                //messageText.text = "Login error: " + loginErrorMessage;
+                break;
+            default:
+                throw new NotImplementedException("No implementation for loginWebRequestResponse of class: " + webRequestResponse.GetType());
         }
     }
 
-    private void OnPatientDataChanged()
-    {
-        if (KeepAlive.Instance.StoredPatient != null)
-        {
-            KeepAlive.Instance.StoredPatient.FirstName = PatientFields[0].text;
-            KeepAlive.Instance.StoredPatient.LastName = PatientFields[1].text;
-        }
-        Debug.Log("Patient data updated in KeepAlive.");
-        DisplayPatientInfo();
-    }
-
-    private void OnGuardianDataChanged()
-    {
-        if (KeepAlive.Instance.StoredGuardian != null)
-        {
-            KeepAlive.Instance.StoredGuardian.FirstName = GuardianFields[0].text;
-            KeepAlive.Instance.StoredGuardian.LastName = GuardianFields[1].text;
-        }
-        Debug.Log("Guardian data updated in KeepAlive.");
-    }
+    #endregion
 }

@@ -4,8 +4,13 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Guardian
 {
-    public Guid ID;
-    public string FirstName;
-    public string LastName;
-    public List<Guid> PatientIDs;
+    public string id;
+    public string userID;
+    public string firstName;
+    public string lastName;
+
+    public Guardian()
+    {
+        id = Convert.ToString(Guid.Empty);
+    }
 }

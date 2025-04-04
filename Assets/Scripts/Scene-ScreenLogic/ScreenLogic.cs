@@ -6,14 +6,14 @@ public class ScreenLogic : MonoBehaviour
     // References to the different screens
     public GameObject welcomeScreen;
     public GameObject homeScreen;
-    public GameObject loginScreen;
-    public GameObject editInfoScreen;
+    //public GameObject loginScreen;
+    //public GameObject editInfoScreen;
     public GameObject tipsScreen;
+    public GameObject registerScreen;
 
 
     void Start()
     {
-        // Initially, show the begin screen
         ShowBeginScreen();
     }
 
@@ -30,20 +30,24 @@ public class ScreenLogic : MonoBehaviour
     }
 
     // Method to show the Login Screen
-    public void ShowLoginScreen()
-    {
-        SetActiveScreen(loginScreen);
-    }
+    //public void ShowLoginScreen()
+    //{
+    //    SetActiveScreen(loginScreen);
+    //}
 
     // Method to show the Edit Info Screen
-    public void ShowEditInfoScreen()
-    {
-        SetActiveScreen(editInfoScreen);
-    }
+    //public void ShowEditInfoScreen()
+    //{
+    //    SetActiveScreen(editInfoScreen);
+    //}
 
     public void TipsScreen()
     {
         SetActiveScreen(tipsScreen);
+    }
+    public void RegisterScreen()
+    {
+        SetActiveScreen(registerScreen);
     }
 
 
@@ -62,24 +66,26 @@ public class ScreenLogic : MonoBehaviour
     {
         welcomeScreen.SetActive(false);
         homeScreen.SetActive(false);
-        loginScreen.SetActive(false);
-        editInfoScreen.SetActive(false);
+        //loginScreen.SetActive(false);
+        //editInfoScreen.SetActive(false);
+        registerScreen.SetActive(false);
     }
 
     // Method to handle the Login Button logic
     public void OnLoginButtonClicked()
     {
+        SetActiveScreen(registerScreen);
 
-        // If there is no data in the DataHandler, go to the Login screen
-        if (KeepAlive.Instance.StoredPatient == null || KeepAlive.Instance.StoredGuardian == null)
-        {
-            ShowLoginScreen();
-        }
-        else
-        {
-            // If data exists, go to the Edit Info screen
-            ShowEditInfoScreen();
-        }
+        //// If there is no data in the DataHandler, go to the Login screen
+        //if (KeepAlive.Instance.UserToken == "" || KeepAlive.Instance.StoredGuardian == null)
+        //{
+        //    ShowLoginScreen();
+        //}
+        //else
+        //{
+        //    // If data exists, go to the Edit Info screen
+        //    ShowEditInfoScreen();
+        //}
     }
 
     // Method to handle the Back to Home Button logic

@@ -1,26 +1,29 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class TreatmentPlanApiClient : MonoBehaviour
 {
     public WebClient webClient;
-    private const string Route = "/api/treatment-plans";
+    private const string Route = "/api/treatmentplans";
 
     public async Awaitable<IWebRequestReponse> GetAll()
     {
-        return await webClient.SendGetRequest(Route);
+        IWebRequestReponse webRequestResponse = await webClient.SendGetRequest(Route); ;
+        return ParseTreatmentPlanListResponse(webRequestResponse);
     }
-
-    public async Awaitable<IWebRequestReponse> Create(TreatmentPlan treatmentPlan)
+    private IWebRequestReponse ParseTreatmentPlanListResponse(IWebRequestReponse webRequestResponse)
     {
-        string data = JsonUtility.ToJson(treatmentPlan);
-        return await webClient.SendPostRequest(Route, data);
-    }
-
-    public async Awaitable<IWebRequestReponse> Delete(Guid id)
-    {
-        string route = $"{Route}/{id}";
-        return await webClient.SendDeleteRequest(route);
+        switch (webRequestResponse)
+        {
+            case WebRequestData<string> data:
+                Debug.Log("Treatmentplan Response data raw: " + data.Data);
+                List<TreatmentPlan> treatmentPlans = JsonHelper.ParseJsonArray<TreatmentPlan>(data.Data);
+                WebRequestData<List<TreatmentPlan>> parsedTreatmentPlanData = new WebRequestData<List<TreatmentPlan>>(treatmentPlans);
+                return parsedTreatmentPlanData;
+            default:
+                return webRequestResponse;
+        }
     }
 }

@@ -3,8 +3,8 @@ using System;
 [System.Serializable]
 public class TreatmentPlan_CareMoment
 {
-    public Guid TreatmentPlanID;
-    public Guid CareMomentID;
-    public int Order;
+    public string treatmentPlanID;
+    public string careMomentID;
+    public int order;
 
 }
