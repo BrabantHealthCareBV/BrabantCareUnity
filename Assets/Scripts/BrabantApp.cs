@@ -119,7 +119,7 @@ public class BrabantApp : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Patient does not exist, creating... {existingResponse.GetType()}");
+                Debug.Log($"Patient does not exist, creating... ");
                 IWebRequestReponse createResponse = await patientApiClient.CreatePatient(KeepAlive.Instance.StoredPatient);
 
                 switch (createResponse)

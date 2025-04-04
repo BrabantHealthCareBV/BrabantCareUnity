@@ -16,13 +16,13 @@ public class PatientApiClient : MonoBehaviour
 
     public async Awaitable<IWebRequestReponse> CreatePatient(Patient patient)
     {
-        if (patient.id == "")
+        if (patient.id == "" || patient.id == null)
             patient.id = Convert.ToString(Guid.Empty);
 
-        if (patient.userID == "")
+        if (patient.userID == "" || patient.userID == null)
             patient.userID = Convert.ToString(Guid.Empty);
 
-        if (patient.doctorID == "")
+        if (patient.doctorID == "" || patient.doctorID == null)
             patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
         IWebRequestReponse webRequestResponse = await webClient.SendPostRequest(Route, data);
@@ -30,13 +30,13 @@ public class PatientApiClient : MonoBehaviour
     }
     public async Awaitable<IWebRequestReponse> UpdatePatient(Patient patient)
     {
-        if (patient.id == "")
+        if (patient.id == "" || patient.id == null)
             patient.id = Convert.ToString(Guid.Empty);
 
-        if (patient.userID == "")
+        if (patient.userID == "" || patient.userID == null)
             patient.userID = Convert.ToString(Guid.Empty);
 
-        if (patient.doctorID == "")
+        if (patient.doctorID == "" || patient.doctorID == null)
             patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
         string route = $"{Route}/{patient.id}";
