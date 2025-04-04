@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class AccountScreenLogic : MonoBehaviour
     [Header("Dropdowns")]
     public TMP_Dropdown patientDropdown;
     public TMP_Dropdown guardianDropdown;
+    public TMP_Dropdown guardianPatientDropdown;
 
     [Header("Settings")]
     public string registerInfo;
@@ -77,7 +79,7 @@ public class AccountScreenLogic : MonoBehaviour
         updateUI();
     }
 
-    private void PopulatePatientDropdown()
+    public void PopulatePatientDropdown()
     {
         patientDropdown.ClearOptions();
         List<string> options = new List<string>();
@@ -90,60 +92,95 @@ public class AccountScreenLogic : MonoBehaviour
         patientDropdown.AddOptions(options);
         patientDropdown.onValueChanged.AddListener(OnPatientSelected);
 
-        if (options.Count > 0)
-        {
-            patientDropdown.value = 0;
-            //KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[0];
-        }
+        //if (options.Count > 0)
+        //{
+        //    patientDropdown.value = 0;
+        //    //KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[0];
+        //}
 
     }
 
-    private void PopulateGuardianDropdown()
+    public void PopulateGuardianDropdown()
     {
         guardianDropdown.ClearOptions();
+        guardianPatientDropdown.ClearOptions();
         List<string> options = new List<string>();
         options.Add("Create");
+
+
+        guardianDropdown.AddOptions(options);
+        options = new List<string>();
         foreach (var guardian in KeepAlive.Instance.StoredGuardians)
         {
             options.Add($"{guardian.firstName} {guardian.lastName}");
         }
-
-        guardianDropdown.AddOptions(options);
+        guardianPatientDropdown.AddOptions(options);
         guardianDropdown.onValueChanged.AddListener(OnGuardianSelected);
+        guardianPatientDropdown.onValueChanged.AddListener(OnGuardianPatientSelected);
 
-        if (options.Count > 0)
-        {
-            guardianDropdown.value = 0;
-            //KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[0];
-        }
+        //if (options.Count > 0)
+        //{
+        //    guardianDropdown.value = 0;
+        //    //KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[0];
+        //}
     }
 
     private void OnPatientSelected(int index)
     {
-        if(index == 0)
-        {// create new patient
-            //patientSaveButtonClick();
-        }
-        if (index+1 < KeepAlive.Instance.StoredPatients.Count)
+        if (index == 0)
         {
-            KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index];
-            updateUI();
+            // "Create" was selected, so clear the selected patient
+            KeepAlive.Instance.StoredPatient = null;
+            Debug.Log("Create a new patient selected.");
         }
+        else if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
+        {
+            // Select the corresponding patient from the list
+            KeepAlive.Instance.StoredPatient = KeepAlive.Instance.StoredPatients[index - 1]; // Subtract 1 to match the list index
+            Debug.Log($"Selected patient: {KeepAlive.Instance.StoredPatient.firstName} {KeepAlive.Instance.StoredPatient.lastName}");
+        }
+        updateUI();
     }
+
+    public void SetGuardianDropdownTo(string targetGuardianid)
+    {
+        Guardian targetGuardian = KeepAlive.Instance.StoredGuardians.Find(g => g.id == targetGuardianid);
+
+        if (targetGuardian == null)
+            return;
+
+        int index = KeepAlive.Instance.StoredGuardians.IndexOf(targetGuardian);
+
+        guardianPatientDropdown.value = index; // +1 because "Create" is at index 0
+        Debug.Log($"Dropdown set to: {targetGuardian.firstName} {targetGuardian.lastName}");
+
+    }
+
 
     private void OnGuardianSelected(int index)
     {
-        if(index == 0)
-        {// create new guardian
-            //guardianSaveButtonClick();
-        }
-        if (index+1 < KeepAlive.Instance.StoredGuardians.Count)
+        if (index == 0)
         {
-            KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index];
-            updateUI();
+            // "Create" was selected, so clear the selected guardian
+            KeepAlive.Instance.StoredGuardian = null;
+            Debug.Log("Create a new guardian selected.");
         }
+        else if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
+        {
+            KeepAlive.Instance.StoredGuardian = KeepAlive.Instance.StoredGuardians[index - 1];
+            Debug.Log($"Guardian selected:{KeepAlive.Instance.StoredGuardian.id}");
+        }
+        updateUI();
     }
-
+    private void OnGuardianPatientSelected(int index)
+    {
+        if (index - 1 < KeepAlive.Instance.StoredGuardians.Count)
+        {
+            KeepAlive.Instance.StoredPatient.guardianID = KeepAlive.Instance.StoredGuardians[index].id;
+            Debug.Log($"Guardian selected:{KeepAlive.Instance.StoredGuardian.id}");
+        }
+        updateUI();
+    }
 
     #region statesetters
     public void setRegisterState()
@@ -194,8 +231,6 @@ public class AccountScreenLogic : MonoBehaviour
     {
         Debug.Log("Updating accountscreen ui");
 
-        PopulatePatientDropdown();
-        PopulateGuardianDropdown();
         if (PatientFields != null && PatientFields.Length >= 2 && KeepAlive.Instance.StoredPatient != null)
         {
             PatientFields[0].text = KeepAlive.Instance.StoredPatient.firstName;
@@ -206,6 +241,7 @@ public class AccountScreenLogic : MonoBehaviour
         {
             GuardianFields[0].text = KeepAlive.Instance.StoredGuardian.firstName;
             GuardianFields[1].text = KeepAlive.Instance.StoredGuardian.lastName;
+            SetGuardianDropdownTo(KeepAlive.Instance.StoredPatient.guardianID);
         }
 
         brabantApp.updateUI();
@@ -248,7 +284,7 @@ public class AccountScreenLogic : MonoBehaviour
         }
         WaitForKeepAliveAndUpdateUI();
     }
-    public async Task patientSaveButtonClickAsync()
+    public async void patientSaveButtonClickAsync()
     {
 
         if (PatientFields[0] != null && PatientFields.Length >= 2)
@@ -267,10 +303,12 @@ public class AccountScreenLogic : MonoBehaviour
         {
             Debug.LogError("Failed to save patient: " + errorResponse.ErrorMessage);
         }
-        updateUI();
-
+        else
+        {
+            Debug.Log($"Got webresponse {response.GetType()}");
+        }
     }
-    public async Task guardianSaveButtonClickAsync()
+    public async void guardianSaveButtonClickAsync()
     {
 
         if (PatientFields[0] != null && PatientFields.Length >= 2)
@@ -289,7 +327,10 @@ public class AccountScreenLogic : MonoBehaviour
         {
             Debug.LogError("Failed to save guardian: " + errorResponse.ErrorMessage);
         }
-        updateUI();
+        else
+        {
+            Debug.Log($"Got webresponse {response.GetType()}");
+        }
 
     }
     #endregion
@@ -364,19 +405,19 @@ public class AccountScreenLogic : MonoBehaviour
     {
         if (PatientFields != null && PatientFields.Length >= 2)
         {
-            PatientFields[0].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
+            //PatientFields[0].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
             PatientFields[0].onEndEdit.AddListener(delegate { OnPatientDataChanged(); });
 
-            PatientFields[1].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
+            //PatientFields[1].onValueChanged.AddListener(delegate { OnPatientDataChanged(); });
             PatientFields[1].onEndEdit.AddListener(delegate { OnPatientDataChanged(); });
         }
 
         if (GuardianFields != null && GuardianFields.Length >= 2)
         {
-            GuardianFields[0].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
+            //GuardianFields[0].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
             GuardianFields[0].onEndEdit.AddListener(delegate { OnGuardianDataChanged(); });
 
-            GuardianFields[1].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
+            //GuardianFields[1].onValueChanged.AddListener(delegate { OnGuardianDataChanged(); });
             GuardianFields[1].onEndEdit.AddListener(delegate { OnGuardianDataChanged(); });
         }
     }

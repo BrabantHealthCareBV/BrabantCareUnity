@@ -11,7 +11,7 @@ public class PatientApiClient : MonoBehaviour
     public async Awaitable<IWebRequestReponse> GetAll()
     {
         IWebRequestReponse webRequestResponse = await webClient.SendGetRequest(Route);
-        return ParsePatientResponse(webRequestResponse);
+        return ParsePatientListResponse(webRequestResponse);
     }
 
     public async Awaitable<IWebRequestReponse> CreatePatient(Patient patient)
@@ -19,7 +19,8 @@ public class PatientApiClient : MonoBehaviour
         if (patient.doctorID == "")
             patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
-        return await webClient.SendPostRequest(Route, data);
+        IWebRequestReponse webRequestResponse = await webClient.SendPostRequest(Route, data);
+        return ParsePatientResponse(webRequestResponse);
     }
     public async Awaitable<IWebRequestReponse> UpdatePatient(Patient patient)
     {
@@ -27,15 +28,17 @@ public class PatientApiClient : MonoBehaviour
             patient.doctorID = Convert.ToString(Guid.Empty);
         string data = JsonUtility.ToJson(patient);
         string route = $"{Route}/{patient.id}";
-        return await webClient.SendPutRequest(route, data);
+        IWebRequestReponse webRequestResponse = await webClient.SendPutRequest(route, data);
+        return ParsePatientResponse(webRequestResponse);
     }
 
     public async Awaitable<IWebRequestReponse> DeletePatient(string id)
     {
         string route = $"{Route}/{id}";
-        return await webClient.SendDeleteRequest(route);
+        IWebRequestReponse webRequestResponse = await webClient.SendDeleteRequest(route);
+        return ParsePatientResponse(webRequestResponse);
     }
-    private IWebRequestReponse ParsePatientResponse(IWebRequestReponse webRequestResponse)
+    private IWebRequestReponse ParsePatientListResponse(IWebRequestReponse webRequestResponse)
     {
         switch (webRequestResponse)
         {
@@ -49,6 +52,19 @@ public class PatientApiClient : MonoBehaviour
         }
     }
 
+    private IWebRequestReponse ParsePatientResponse(IWebRequestReponse webRequestResponse)
+    {
+        switch (webRequestResponse)
+        {
+            case WebRequestData<string> data:
+                Debug.Log("Patient Response data raw: " + data.Data);
+                Patient patients = JsonUtility.FromJson<Patient>(data.Data);
+                WebRequestData<Patient> parsedPatientData = new WebRequestData<Patient>(patients);
+                return parsedPatientData;
+            default:
+                return webRequestResponse;
+        }
+    }
     public async Task<IWebRequestReponse> GetById(string id)
     {
         string route = $"{Route}/{id}";

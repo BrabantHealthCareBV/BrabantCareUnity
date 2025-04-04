@@ -64,11 +64,11 @@ public class BrabantApp : MonoBehaviour
                     case WebRequestData<Guardian>:
                         Debug.Log("Guardian updated successfully.");
                         return updateResponse;
-                        break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Update guardian error: " + errorResponse.ErrorMessage);
                         return errorResponse;
-                        break;
+                    default:
+                        return null;
                 }
             }
             else
@@ -81,15 +81,16 @@ public class BrabantApp : MonoBehaviour
                     case WebRequestData<Guardian>:
                         Debug.Log("Guardian created successfully.");
                         return createResponse;
-                        break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Create guardian error: " + errorResponse.ErrorMessage);
                         return errorResponse;
-                        break;
+                    default:
+                        return null;
                 }
             }
         }
-        return null;
+        else
+            return null;
     }
 
 
@@ -110,11 +111,9 @@ public class BrabantApp : MonoBehaviour
                     case WebRequestData<Patient>:
                         Debug.Log("Patient updated successfully.");
                         return updateResponse;
-                        break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Update patient error: " + errorResponse.ErrorMessage);
                         return errorResponse;
-                        break;
                 }
             }
             else
@@ -127,11 +126,9 @@ public class BrabantApp : MonoBehaviour
                     case WebRequestData<Patient>:
                         Debug.Log("Patient created successfully.");
                         return createResponse;
-                        break;
                     case WebRequestError errorResponse:
                         Debug.LogError("Create patient error: " + errorResponse.ErrorMessage);
                         return errorResponse;
-                        break;
                 }
             }
         }
@@ -151,7 +148,7 @@ public class BrabantApp : MonoBehaviour
 
         // Fetch patient data
         IWebRequestReponse patientResponse = await patientApiClient.GetAll();
-        //guardianResponse = ParsePatientResponse(guardianResponse);  // Parse the response
+        //guardianResponse = ParsePatientListResponse(guardianResponse);  // Parse the response
 
         switch (patientResponse)
         {
@@ -172,7 +169,7 @@ public class BrabantApp : MonoBehaviour
 
         // Fetch patient data
         IWebRequestReponse guardianResponse = await guardianApiClient.GetAll();
-        //guardianResponse = ParsePatientResponse(guardianResponse);  // Parse the response
+        //guardianResponse = ParsePatientListResponse(guardianResponse);  // Parse the response
 
         switch (guardianResponse)
         {
@@ -194,6 +191,8 @@ public class BrabantApp : MonoBehaviour
 
         // Update UI after fetching data
         updateUI();
+        accountScreenLogic.PopulatePatientDropdown();
+        accountScreenLogic.PopulateGuardianDropdown();
         accountScreenLogic.updateUI();
     }
 
