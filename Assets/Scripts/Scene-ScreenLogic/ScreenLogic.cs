@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class ScreenLogic : MonoBehaviour
 {
-    // References to the different screens
     public GameObject welcomeScreen;
     public GameObject homeScreen;
     //public GameObject loginScreen;
@@ -17,13 +16,11 @@ public class ScreenLogic : MonoBehaviour
         ShowBeginScreen();
     }
 
-    // Method to show the Begin Screen
     public void ShowBeginScreen()
     {
         SetActiveScreen(welcomeScreen);
     }
 
-    // Method to show the Home Screen
     public void ShowHomeScreen()
     {
         SetActiveScreen(homeScreen);
@@ -51,7 +48,6 @@ public class ScreenLogic : MonoBehaviour
     }
 
 
-    // Helper method to set a single active screen and deactivate others
     private void SetActiveScreen(GameObject screenToActivate)
     {
         DeactivateAllScreens();
@@ -61,7 +57,6 @@ public class ScreenLogic : MonoBehaviour
         }
     }
 
-    // Helper method to deactivate all screens
     private void DeactivateAllScreens()
     {
         welcomeScreen.SetActive(false);
@@ -71,7 +66,6 @@ public class ScreenLogic : MonoBehaviour
         registerScreen.SetActive(false);
     }
 
-    // Method to handle the Login Button logic
     public void OnLoginButtonClicked()
     {
         SetActiveScreen(registerScreen);
@@ -88,7 +82,6 @@ public class ScreenLogic : MonoBehaviour
         //}
     }
 
-    // Method to handle the Back to Home Button logic
     public void OnBackToHomeButtonClicked()
     {
         ShowHomeScreen();

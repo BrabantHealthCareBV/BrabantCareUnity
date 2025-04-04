@@ -13,14 +13,12 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         rb.linearVelocity = moveInput * moveSpeed;
@@ -43,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (moveInput.x != 0)
         {
-            moveInput.y = 0; // Zorg ervoor dat de speler niet tegelijkertijd horizontaal en verticaal beweegt
+            moveInput.y = 0;
         }
     }
 }
