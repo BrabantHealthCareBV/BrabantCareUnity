@@ -15,10 +15,10 @@ public static class TestdataGenerator
     {
         return new Doctor
         {
-            ID = Guid.NewGuid(),
-            Name = doctorNames[UnityEngine.Random.Range(0, doctorNames.Count)],
-            Specialization = specializations[UnityEngine.Random.Range(0, specializations.Count)],
-            PatientIDs = new List<Guid>()
+            id = Convert.ToString(Guid.NewGuid()),
+            name = doctorNames[UnityEngine.Random.Range(0, doctorNames.Count)],
+            specialization = specializations[UnityEngine.Random.Range(0, specializations.Count)],
+            patientIDs = new List<string>()
         };
     }
 
@@ -26,23 +26,22 @@ public static class TestdataGenerator
     {
         return new Guardian
         {
-            ID = Guid.NewGuid(),
-            FirstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
-            LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
-            PatientIDs = new List<Guid>()
+            id = Convert.ToString(Guid.NewGuid()),
+            firstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
+            lastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)]
         };
     }
 
-    public static Patient GeneratePatient(Guid guardianID, Guid? doctorID)
+    public static Patient GeneratePatient(string guardianID, string doctorID)
     {
         return new Patient
         {
-            ID = Guid.NewGuid(),
-            FirstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
-            LastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
-            GuardianID = guardianID,
-            TreatmentPlanID = Guid.NewGuid(),
-            DoctorID = doctorID
+            id = Convert.ToString(Guid.NewGuid()),
+            firstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)],
+            lastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)],
+            guardianID = guardianID,
+            treatmentPlanID = Convert.ToString(Guid.NewGuid()),
+            doctorID = doctorID
         };
     }
 }
